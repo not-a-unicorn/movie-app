@@ -72,3 +72,5 @@ gulpfile.js
 #istanbul test coverage outputs
 coverage/
 
+#nodemon config (has environment variables)
+nodemon.json
