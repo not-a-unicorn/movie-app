@@ -4,42 +4,45 @@
 body {
   margin: 0;
   padding: 0;
+  background-color: #0b1124;
 }
 .new-movies {
   margin: 0.5em;
+  letter-spacing: 0.2em;
+  color: #efefe3;
+  font-family: segoe;
 }
 .movie {
   padding: 1em;
 }
 .movie-title {
-  font-size: 30px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-stretch: semi-expanded;
+  font-family: segoe;
+  font-weight: semi-bold;
+  letter-spacing: 0.1em;
+  color: #efefe3;
 }
-
 .movie-poster {
   width: 100%;
+
+  box-shadow: 0 4px 8px 0 rgba(16, 108, 145, 0.2), 0 6px 20px 0 white;
+  z-index: -6;
+  border-radius: 20px;
 }
 .movie-info {
   list-style-type: none;
   display: flex;
 }
 .movie-more-info {
-  text-decoration: none;
-  color: black;
-  font-size: 16px;
-}
-.movie-more-info:hover {
-  border: 1px solid black;
-  text-align: center;
-  padding: 2px;
-  border-radius: 25px;
-  color: purple;
+  text-decoration: blink;
+  color: #efefe3;
+  font-size: 1.3em;
 }
 .movie-show-time {
   flex-direction: row;
   flex-grow: 2;
 }
 .movie-language {
-  font-size: 16px;
+  font-size: 1.3em;
+  flex-grow: 1;
+  color: #efefe3;
 }
