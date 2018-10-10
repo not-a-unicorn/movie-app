@@ -22,7 +22,6 @@ exports.test = function (req, res) {
 
 //Lookp movie with id
 exports.movie_details = function (req, res) {
-  console.log("in /movie");
   Movie.findById(req.params.id, function (err, movie) {
     if (err) return next(err);
     res.send(movie);
