@@ -14,7 +14,6 @@ exports.test = function(req, res) {
 
 //Lookp movie with id
 exports.movie_details = function(req, res) {
-  console.log("in /movie");
   Movie.findById(req.params.id, function(err, movie) {
     if (err) return next(err);
     res.send(movie);
@@ -106,7 +105,7 @@ exports.movie_createbulk = function(req, res) {
     }) //then
     .catch(e => {
       res.status(404).json({ Error: "Movie doesnt exist" });
-      
+
       console.log(e);
     });
 };
