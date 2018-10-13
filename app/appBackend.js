@@ -15,6 +15,8 @@ var app = express();
 var morgan = require("morgan");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
+require("dotenv").config();
+var path = require("path"); // remove later
 
 //import appwide routes
 
@@ -22,6 +24,7 @@ var mongoose = require("mongoose");
 // Set up mongoose connection - Specfic URI in Environment variables takes precedence
 var dbURI = process.env.DB_URI || "mongodb://" + process.env.DB_USER + ":" + process.env.DB_PASSWORD + "@" + process.env.DB_HOST + "/" + process.env.DB_NAME;
 
+console.log("DB URL " + dbURI);
 mongoose.connect(dbURI, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
@@ -44,9 +47,14 @@ app.use(function (req, res, next) {
   next();
 });
 
-//Assign Route definitions to the request
+//Static files -- NEED TO DEBUG
 
-//app.use("/", mainRoutes);
+// const staticFiles = path.join(__dirname, "../../public");
+// console.log(`Static files : ${staticFiles}`);
+// app.use(express.static(path.join(__dirname, 'public')));
+
+//Assign Route definitions to the request
+app.use("/", _app2.default);
 app.use(["/movie", "/movies"], _movie2.default);
 
 var port = process.env.PORT || 5000;

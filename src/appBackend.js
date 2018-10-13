@@ -3,6 +3,8 @@ const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+require("dotenv").config();
+const path = require("path"); // remove later
 
 //import appwide routes
 import appRoutes from "./app.route";
@@ -15,6 +17,7 @@ const dbURI =
     process.env.DB_HOST
   }/${process.env.DB_NAME}`;
 
+  console.log(`DB URL ${dbURI}`);
 mongoose.connect(
   dbURI,
   { useNewUrlParser: true }
@@ -43,9 +46,14 @@ app.use((req, res, next) => {
   next();
 });
 
-//Assign Route definitions to the request
+//Static files -- NEED TO DEBUG
 
-//app.use("/", mainRoutes);
+// const staticFiles = path.join(__dirname, "../../public");
+// console.log(`Static files : ${staticFiles}`);
+// app.use(express.static(path.join(__dirname, 'public')));
+
+//Assign Route definitions to the request
+app.use("/", appRoutes);
 app.use(["/movie", "/movies"], movieRoutes);
 
 let port = process.env.PORT || 5000;

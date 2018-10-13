@@ -10,7 +10,7 @@ var SessionSchema = new Schema({
   state: { type: "String" },
   location: { type: "String" },
   cinema: { type: "String" },
-  sessionDateTime: { type: [Schema.Types.Date] },
+  sessionDateTime: ["String"],
   ticketLink: { type: Schema.Types.String }
 });
 

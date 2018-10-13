@@ -4,21 +4,14 @@ var express = require("express");
 var router = express.Router();
 var path = require("path");
 
-//Import Controllers
-var movieController = require("./movie.controller");
-
 // test
 //router.get("/index.html", movieController.test);
 
 router.get("/", function (req, res) {
-  console.log("in index");
-  res.sendFile(path.join(__dirname + '/../public/app.html'));
-  //   res.sendFile("public/app.html",__dirname);
-  // res.set("Content-Type", "text/html");
-
-  // res.render("/../public/app.html");
-  console.log(res.path);
-  //res.render("/../public/app.html");
+  var clientEntryPoint = path.join(__dirname + "../../public/app.html");
+  // let clientEntryPoint = path.join(__dirname + "/public/app.html");
+  console.log("in index. About to route to " + clientEntryPoint);
+  res.sendFile(clientEntryPoint);
 
   //res.sendFile(path.join(__dirname+'/../public/app.html'));
 });

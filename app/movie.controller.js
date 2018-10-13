@@ -77,17 +77,36 @@ exports.movie_create = function (req, res) {
 exports.movie_createbulk = function (req, res) {
   var moviename = req.body.movies;
   retrieveMovie(moviename).then(function (_movie) {
-    var session = new Session({
+    var sessions = [new Session({
       _sesionid: new mongoose.Types.ObjectId(),
-      state: "NSW"
-    }); //New Session
+      state: "VIC",
+      location: "Dandenong",
+      cinema: "Event",
+      sessionDateTime: ["27/09/2018 18:00"],
+      ticketLink: "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+    }), new Session({
+      _sesionid: new mongoose.Types.ObjectId(),
+      state: "NSW",
+      location: "Liverpool ",
+      cinema: "Event Cinemas",
+      sessionDateTime: ["27/09/2018 18:00", "27/09/2018 21:00", "27/09/2018 15:00"],
+      ticketLink: "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+    }), new Session({
+      _sesionid: new mongoose.Types.ObjectId(),
+      state: "ACT",
+      location: "Canberra",
+      cinema: "Event",
+      sessionDateTime: ["27/09/2018 18:00"],
+      ticketLink: "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+    })]; //New Session
+
 
     //Movie
     var movie = new Movie({
       title: _movie.title,
       language: _movie.languages,
       synopsis: _movie.plot,
-      trailer: "",
+      trailer: "https://www.youtube.com/watch?v=GguGXG1PBcs",
       poster: _movie.poster,
       leadActors: _movie.actors,
       cast: _movie.actors, //duplicate of leadActors
@@ -95,7 +114,7 @@ exports.movie_createbulk = function (req, res) {
         director: _movie.director,
         musicDirector: ""
       },
-      sessions: [session]
+      sessions: sessions
     }); //new Movie
 
     movie.save(function (err) {
