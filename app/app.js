@@ -1,39 +1,56 @@
 "use strict";
 
-// @gokuvinoth
-// 03/Oct/2018 Initial Draft
-// 07/Oct/2018 modified as per the comments to simply code
-// to retrive the movie list from api and display in the app.html
-//------ improments required to reuse functions in creating elements
+var _app = require("./app.route");
 
-// Calling the movie result api
-//include("xmlhttprequest").XMLHttpRequest;
+var _app2 = _interopRequireDefault(_app);
 
-var xhr = new XMLHttpRequest();
-xhr.responseType = "json";
-xhr.onreadystatechange = function () {
-  if (xhr.readyState === XMLHttpRequest.DONE) {
-    console.log(xhr.response);
-    // function call to process api result
-    displayResult(xhr.response);
+var _movie = require("./movie.route");
+
+var _movie2 = _interopRequireDefault(_movie);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var express = require("express");
+var app = express();
+var morgan = require("morgan");
+var bodyParser = require("body-parser");
+var mongoose = require("mongoose");
+require("dotenv").config();
+var path = require("path"); // remove later
+
+//import appwide routes
+
+
+//Web Server
+app.use(morgan("dev")); //HTTP request logger
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    return res.status(200).json({});
   }
-};
-// url to call api
-xhr.open("GET", "https://salty-sea-40504.herokuapp.com/movies");
-xhr.send();
+  next();
+});
 
-var displayResult = function displayResult(response) {
-  var responseDataArry = response;
-  console.log(responseDataArry[0]);
+//Static files -- NEED TO DEBUG
 
-  var movieElement = "";
-  //   looping to create elements for number of items returned
-  responseDataArry.forEach(function (responseData) {
-    movieElement = movieElement + ("<div class=\"movie\">\n    <h2 class=\"movie-title\" id=\"movietitle\">" + responseData.title + "</h2>\n    <img class=\"movie-poster\" id=\"movieposter\" src=\"" + responseData.poster + "\" alt=\"hero and heroine\">\n    <ul class=\"movie-info\" id=\"movieinfo\">\n        <li class=\"movie-show-time\" id=movieshowtime><a class=\"movie-more-info\" id=\"moviemoreinfo\" href=\"#\">" + responseData.sessions[0].sessionDateTime[0] + "</a></li>\n        <li class=\"movie-language\" id=\"movielanguage\">" + responseData.language + "</li>\n    </ul>\n</div>");
+// const staticFiles = path.join(__dirname, "../../public");
+// console.log(`Static files : ${staticFiles}`);
+// app.use(express.static(path.join(__dirname, 'public')));
 
-    console.log(movieElement);
-  });
-  //   create final element and append to display the full content in HTML
-  var resultElement = document.querySelector("#movies");
-  resultElement.innerHTML = movieElement;
-};
+//Assign Route definitions to the request
+app.use("/", _app2.default);
+app.use(["/movie", "/movies"], _movie2.default);
+
+var port = process.env.PORT || 5000;
+
+// app.listen(port, () => {
+//   console.log("Movie App server is up and running on port numner " + port);
+// });
+
+module.exports = app;

@@ -1,0 +1,506 @@
+[
+  {
+    "crew": { "director": "Mari Selvaraj", "musicDirector": "" },
+    "_id": "5bc1a14b8a60eba3d0a82059",
+    "title": "Pariyerum Perumal",
+    "language": "Tamil",
+    "synopsis": "Pariyerum Perumal, an idealistic youngster, enrolls at the law college optimistic of the future that lies ahead of him. However, a chain of events ensue that wake him up to the realities of the world he lives in.",
+    "trailer": "https://www.youtube.com/watch?v=GguGXG1PBcs",
+    "poster": "https://m.media-amazon.com/images/M/MV5BYzQ3YmQ2MTctZjQyMi00MGI3LWJhMGQtODI5ZjVmZDFlOGViXkEyXkFqcGdeQXVyODk4ODEyMjk@._V1_SX300.jpg",
+    "leadActors": "Anandhi, Yogi Babu, Kathir",
+    "cast": "Anandhi, Yogi Babu, Kathir",
+    "sessions": [
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a14b8a60eba3d0a82054",
+        "state": "VIC",
+        "location": "Dandenong",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": [
+          "27/09/2018 18:00",
+          "27/09/2018 21:00",
+          "27/09/2018 15:00"
+        ],
+        "_id": "5bc1a14b8a60eba3d0a82056",
+        "state": "NSW",
+        "location": "Liverpool ",
+        "cinema": "Event Cinemas",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a14b8a60eba3d0a82058",
+        "state": "ACT",
+        "location": "Canberra",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "crew": { "director": "R. Ajay Gnanamuthu", "musicDirector": "" },
+    "_id": "5bc1a2248a60eba3d0a82063",
+    "title": "Imaikkaa Nodigal",
+    "language": "Tamil",
+    "synopsis": "A suave CBI officer (Nayanthara), is in search of a serial killer who kidnaps and kills the children of important people. The killer, however, is targeting his nemesis next.",
+    "trailer": "https://www.youtube.com/watch?v=GguGXG1PBcs",
+    "poster": "https://m.media-amazon.com/images/M/MV5BZTMyZTE0ZTAtZjFhZi00YzU1LWJiZjEtMjgzYWQzZDJkMmYxXkEyXkFqcGdeQXVyMjYwMDk5NjE@._V1_SX300.jpg",
+    "leadActors": "Nayanthara, Atharvaa Murali, Anurag Kashyap, Raashi Khanna",
+    "cast": "Nayanthara, Atharvaa Murali, Anurag Kashyap, Raashi Khanna",
+    "sessions": [
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a2248a60eba3d0a8205e",
+        "state": "VIC",
+        "location": "Dandenong",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": [
+          "27/09/2018 18:00",
+          "27/09/2018 21:00",
+          "27/09/2018 15:00"
+        ],
+        "_id": "5bc1a2248a60eba3d0a82060",
+        "state": "NSW",
+        "location": "Liverpool ",
+        "cinema": "Event Cinemas",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a2248a60eba3d0a82062",
+        "state": "ACT",
+        "location": "Canberra",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "crew": { "director": "Gautham Menon", "musicDirector": "" },
+    "_id": "5bc1a0dd8a60eba3d0a82027",
+    "title": "Minnale",
+    "language": "Tamil, Telugu",
+    "synopsis": "A young girl is torn between an obsessive lover and a mild-mannered suitor.",
+    "trailer": "https://www.youtube.com/watch?v=GguGXG1PBcs",
+    "poster": "https://images-na.ssl-images-amazon.com/images/M/MV5BZjAwOGY4ZWQtYTIwNi00MTFkLWE2ODQtZDcwZTQwNTQwOTNhXkEyXkFqcGdeQXVyMjAzMjcxNTE@._V1_SX300.jpg",
+    "leadActors": "Madhavan, Abbas, Reema Sen, Nagesh",
+    "cast": "Madhavan, Abbas, Reema Sen, Nagesh",
+    "sessions": [
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a0dd8a60eba3d0a82022",
+        "state": "VIC",
+        "location": "Dandenong",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": [
+          "27/09/2018 18:00",
+          "27/09/2018 21:00",
+          "27/09/2018 15:00"
+        ],
+        "_id": "5bc1a0dd8a60eba3d0a82024",
+        "state": "NSW",
+        "location": "Liverpool ",
+        "cinema": "Event Cinemas",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a0dd8a60eba3d0a82026",
+        "state": "ACT",
+        "location": "Canberra",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "crew": { "director": "Mani Ratnam", "musicDirector": "" },
+    "_id": "5bc1a0ff8a60eba3d0a82031",
+    "title": "Chekka Chivantha Vaanam",
+    "language": "Tamil",
+    "synopsis": "N/A",
+    "trailer": "https://www.youtube.com/watch?v=GguGXG1PBcs",
+    "poster": "https://m.media-amazon.com/images/M/MV5BNmJjODhlMjQtZTVhYS00NDk3LWE0Y2UtYzIxNzc5NDkwNzZkXkEyXkFqcGdeQXVyODIwMDI1NjM@._V1_SX300.jpg",
+    "leadActors": "Aditi Rao Hydari, Vijay Sethupathi, Arvind Swamy, Prakash Raj",
+    "cast": "Aditi Rao Hydari, Vijay Sethupathi, Arvind Swamy, Prakash Raj",
+    "sessions": [
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a0ff8a60eba3d0a8202c",
+        "state": "VIC",
+        "location": "Dandenong",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": [
+          "27/09/2018 18:00",
+          "27/09/2018 21:00",
+          "27/09/2018 15:00"
+        ],
+        "_id": "5bc1a0ff8a60eba3d0a8202e",
+        "state": "NSW",
+        "location": "Liverpool ",
+        "cinema": "Event Cinemas",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a0ff8a60eba3d0a82030",
+        "state": "ACT",
+        "location": "Canberra",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "crew": { "director": "Ruben Fleischer", "musicDirector": "" },
+    "_id": "5bc1a1038a60eba3d0a8203b",
+    "title": "Venom",
+    "language": "English",
+    "synopsis": "When Eddie Brock acquires the powers of a symbiote, he will have to release his alter-ego \"Venom\" to save his life.",
+    "trailer": "https://www.youtube.com/watch?v=GguGXG1PBcs",
+    "poster": "https://m.media-amazon.com/images/M/MV5BNzAwNzUzNjY4MV5BMl5BanBnXkFtZTgwMTQ5MzM0NjM@._V1_SX300.jpg",
+    "leadActors": "Tom Hardy, Michelle Williams, Riz Ahmed, Scott Haze",
+    "cast": "Tom Hardy, Michelle Williams, Riz Ahmed, Scott Haze",
+    "sessions": [
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a1038a60eba3d0a82036",
+        "state": "VIC",
+        "location": "Dandenong",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": [
+          "27/09/2018 18:00",
+          "27/09/2018 21:00",
+          "27/09/2018 15:00"
+        ],
+        "_id": "5bc1a1038a60eba3d0a82038",
+        "state": "NSW",
+        "location": "Liverpool ",
+        "cinema": "Event Cinemas",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a1038a60eba3d0a8203a",
+        "state": "ACT",
+        "location": "Canberra",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "crew": { "director": "Hari", "musicDirector": "" },
+    "_id": "5bc1a10f8a60eba3d0a82045",
+    "title": "Saamy²",
+    "language": "Tamil",
+    "synopsis": "N/A",
+    "trailer": "https://www.youtube.com/watch?v=GguGXG1PBcs",
+    "poster": "https://m.media-amazon.com/images/M/MV5BM2IxMGNlMWMtZDVhYS00YjkyLWFjMDktY2ZjMmJhOTc0MGZiXkEyXkFqcGdeQXVyNjY1NTEzNjE@._V1_SX300.jpg",
+    "leadActors": "Vikram, Keerthi Suresh, Trisha Krishnan, Bobby Simha",
+    "cast": "Vikram, Keerthi Suresh, Trisha Krishnan, Bobby Simha",
+    "sessions": [
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a10f8a60eba3d0a82040",
+        "state": "VIC",
+        "location": "Dandenong",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": [
+          "27/09/2018 18:00",
+          "27/09/2018 21:00",
+          "27/09/2018 15:00"
+        ],
+        "_id": "5bc1a10f8a60eba3d0a82042",
+        "state": "NSW",
+        "location": "Liverpool ",
+        "cinema": "Event Cinemas",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a10f8a60eba3d0a82044",
+        "state": "ACT",
+        "location": "Canberra",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "crew": { "director": "Ridley Scott", "musicDirector": "" },
+    "_id": "5bc1a1158a60eba3d0a8204f",
+    "title": "Alien",
+    "language": "English",
+    "synopsis": "A commercial crew aboard the deep space towing vessel, Nostromo is on its way home when they pick up an SOS warning from a distant moon. What they don't know is that the SOS warning is not like any other ordinary warning call. Picking up the signal, the crew realizes that they are not alone on the spaceship when an alien stowaway is on the cargo ship.",
+    "trailer": "https://www.youtube.com/watch?v=GguGXG1PBcs",
+    "poster": "https://m.media-amazon.com/images/M/MV5BMmQ2MmU3NzktZjAxOC00ZDZhLTk4YzEtMDMyMzcxY2IwMDAyXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg",
+    "leadActors": "Tom Skerritt, Sigourney Weaver, Veronica Cartwright, Harry Dean Stanton",
+    "cast": "Tom Skerritt, Sigourney Weaver, Veronica Cartwright, Harry Dean Stanton",
+    "sessions": [
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a1158a60eba3d0a8204a",
+        "state": "VIC",
+        "location": "Dandenong",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": [
+          "27/09/2018 18:00",
+          "27/09/2018 21:00",
+          "27/09/2018 15:00"
+        ],
+        "_id": "5bc1a1158a60eba3d0a8204c",
+        "state": "NSW",
+        "location": "Liverpool ",
+        "cinema": "Event Cinemas",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a1158a60eba3d0a8204e",
+        "state": "ACT",
+        "location": "Canberra",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "crew": { "director": "Pandiraj", "musicDirector": "" },
+    "_id": "5bc1a2328a60eba3d0a8206d",
+    "title": "Kadaikutty Singam",
+    "language": "Tamil",
+    "synopsis": "Gunasingam, a family-loving farmer who hails from a small town, tries his best to keep his big family united despite him being misunderstood by many.",
+    "trailer": "https://www.youtube.com/watch?v=GguGXG1PBcs",
+    "poster": "https://m.media-amazon.com/images/M/MV5BMjlmZGRmYjktZjIxNC00MjYzLWI4MmYtNDdjOGYyMmYxZmMzXkEyXkFqcGdeQXVyODk4ODEyMjk@._V1_SX300.jpg",
+    "leadActors": "Karthi, Sathyaraj, Sayyeshaa Saigal, Priya Bhavani Shankar",
+    "cast": "Karthi, Sathyaraj, Sayyeshaa Saigal, Priya Bhavani Shankar",
+    "sessions": [
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a2328a60eba3d0a82068",
+        "state": "VIC",
+        "location": "Dandenong",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": [
+          "27/09/2018 18:00",
+          "27/09/2018 21:00",
+          "27/09/2018 15:00"
+        ],
+        "_id": "5bc1a2328a60eba3d0a8206a",
+        "state": "NSW",
+        "location": "Liverpool ",
+        "cinema": "Event Cinemas",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a2328a60eba3d0a8206c",
+        "state": "ACT",
+        "location": "Canberra",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "crew": { "director": "Nelson", "musicDirector": "" },
+    "_id": "5bc1a2388a60eba3d0a82077",
+    "title": "Kolamavu Kokila",
+    "language": "Tamil",
+    "synopsis": "Kolamavu Kokila is a Tamil movie starring Nayanthara in a prominent role. It is an action drama directed by Nelson Dilipkumar, with Anirudh Ravichander as the musician, forming part of the crew.",
+    "trailer": "https://www.youtube.com/watch?v=GguGXG1PBcs",
+    "poster": "https://m.media-amazon.com/images/M/MV5BNGRiMDRmNjEtNzE5Yy00ZDZiLTk5Y2UtMmZjNjNjMjUwYzY2XkEyXkFqcGdeQXVyNTgxODY5ODI@._V1_SX300.jpg",
+    "leadActors": "Nayanthara, Yogi Babu, Saranya Ponvannan",
+    "cast": "Nayanthara, Yogi Babu, Saranya Ponvannan",
+    "sessions": [
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a2388a60eba3d0a82072",
+        "state": "VIC",
+        "location": "Dandenong",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": [
+          "27/09/2018 18:00",
+          "27/09/2018 21:00",
+          "27/09/2018 15:00"
+        ],
+        "_id": "5bc1a2388a60eba3d0a82074",
+        "state": "NSW",
+        "location": "Liverpool ",
+        "cinema": "Event Cinemas",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a2388a60eba3d0a82076",
+        "state": "ACT",
+        "location": "Canberra",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "crew": { "director": "Nagesh Kukunoor", "musicDirector": "" },
+    "_id": "5bc1a2448a60eba3d0a82081",
+    "title": "Lakshmi",
+    "language": "Hindi",
+    "synopsis": "Based on true events, Lakshmi is a story of heroism and untold courage. Lakshmi, a 13 year old girl is kidnapped and sold into prostitution. Thrown into this horrific, inhuman world where she is raped and brutally beaten she barely survives with the help of the other girls and her own will to never give in. Finally she is rescued in a police raid. Against all odds, Lakshmi shows courage where everybody else fails. Resisting all pressure - violent threats, coercion and bribes, she stands up in court and in a landmark case in India, succeeds in putting the traffickers behind bars.",
+    "trailer": "https://www.youtube.com/watch?v=GguGXG1PBcs",
+    "poster": "https://images-na.ssl-images-amazon.com/images/M/MV5BMGFlMmEzYTQtZTgzZS00OWI2LTkzZTctNTUwMDBhZjlhMjk5XkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_SX300.jpg",
+    "leadActors": "Monali Thakur, Vibha Chhibber, Ranjeet Jha, Ram Kapoor",
+    "cast": "Monali Thakur, Vibha Chhibber, Ranjeet Jha, Ram Kapoor",
+    "sessions": [
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a2448a60eba3d0a8207c",
+        "state": "VIC",
+        "location": "Dandenong",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": [
+          "27/09/2018 18:00",
+          "27/09/2018 21:00",
+          "27/09/2018 15:00"
+        ],
+        "_id": "5bc1a2448a60eba3d0a8207e",
+        "state": "NSW",
+        "location": "Liverpool ",
+        "cinema": "Event Cinemas",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a2448a60eba3d0a82080",
+        "state": "ACT",
+        "location": "Canberra",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "crew": { "director": "Kamal Haasan", "musicDirector": "" },
+    "_id": "5bc1a24e8a60eba3d0a8208b",
+    "title": "Vishwaroopam 2",
+    "language": "Hindi, Tamil",
+    "synopsis": "Wizam attempts to save the nation from warrior Omar.",
+    "trailer": "https://www.youtube.com/watch?v=GguGXG1PBcs",
+    "poster": "N/A",
+    "leadActors": "Kamal Haasan, Rahul Bose, Shekhar Kapur, Pooja Kumar",
+    "cast": "Kamal Haasan, Rahul Bose, Shekhar Kapur, Pooja Kumar",
+    "sessions": [
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a24e8a60eba3d0a82086",
+        "state": "VIC",
+        "location": "Dandenong",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": [
+          "27/09/2018 18:00",
+          "27/09/2018 21:00",
+          "27/09/2018 15:00"
+        ],
+        "_id": "5bc1a24e8a60eba3d0a82088",
+        "state": "NSW",
+        "location": "Liverpool ",
+        "cinema": "Event Cinemas",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a24e8a60eba3d0a8208a",
+        "state": "ACT",
+        "location": "Canberra",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "crew": { "director": "Ponram", "musicDirector": "" },
+    "_id": "5bc1a2578a60eba3d0a82095",
+    "title": "Seema Raja",
+    "language": "Tamil",
+    "synopsis": "Seemaraja is a Tamil movie starring Sivakarthikeyan and Samantha Akkineni in prominent roles. It is a drama directed by Ponram.",
+    "trailer": "https://www.youtube.com/watch?v=GguGXG1PBcs",
+    "poster": "https://m.media-amazon.com/images/M/MV5BYWJhYWUwZGYtNWRkNS00YjM4LTk5ZmMtN2MxYzdjNjMyMWM2XkEyXkFqcGdeQXVyMzYxOTQ3MDg@._V1_SX300.jpg",
+    "leadActors": "Yogi Babu, Lal, Manobala, Napolean",
+    "cast": "Yogi Babu, Lal, Manobala, Napolean",
+    "sessions": [
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a2578a60eba3d0a82090",
+        "state": "VIC",
+        "location": "Dandenong",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": [
+          "27/09/2018 18:00",
+          "27/09/2018 21:00",
+          "27/09/2018 15:00"
+        ],
+        "_id": "5bc1a2578a60eba3d0a82092",
+        "state": "NSW",
+        "location": "Liverpool ",
+        "cinema": "Event Cinemas",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      },
+      {
+        "sessionDateTime": ["27/09/2018 18:00"],
+        "_id": "5bc1a2578a60eba3d0a82094",
+        "state": "ACT",
+        "location": "Canberra",
+        "cinema": "Event",
+        "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
+      }
+    ],
+    "__v": 0
+  }
+]
