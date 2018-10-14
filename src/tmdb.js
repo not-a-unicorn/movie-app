@@ -2,20 +2,33 @@
 //11Oct 2018
 //Retrives movies from TMDB
 require("isomorphic-fetch");
-//API Access Key for  themoviedb.org
+
+//Helper method
+function stripTrailingCommas(_string) {
+  return _string.replace(/,\s*$/, "");
+}
+
+//API Access Key for themoviedb.org
 let movieAPIKey = "5066229b476a9c157a74692454f7661e";
 
-function getMovieID(_apiKey, _movieName) {
-  //Construct movie lookup URL
-  if (!_apiKey) throw Error(`Valid APIKey must be passed : ${_apiKey}`);
-  if (!_movieName) throw Error(`Movie name must be passed : ${_movieName}`);
-
+//Consturcts the URL to fetch MovieID from themoviedb.org
+function getMovieIDURL(_apiKey, _movieName) {
   let searchURL = `https://api.themoviedb.org/3/search/movie?api_key=[API_KEY]&query=[MOVIE_NAME]&page=1&include_adult=true`;
   searchURL = searchURL
     .split("[API_KEY]")
     .join(_apiKey)
     .split("[MOVIE_NAME]")
     .join(_movieName);
+  return searchURL;
+}
+//get movieID from themoviedb.org
+//Used to get all other movie details
+function getMovieID(_apiKey, _movieName) {
+  //Construct movie lookup URL
+  if (!_apiKey) throw Error(`Valid APIKey must be passed : ${_apiKey}`);
+  if (!_movieName) throw Error(`Movie name must be passed : ${_movieName}`);
+
+  let searchURL = getMovieIDURL(_apiKey, _movieName);
 
   return new Promise((resolve, reject) => {
     fetch(searchURL)
@@ -40,11 +53,9 @@ function getMovieID(_apiKey, _movieName) {
       .catch(err => reject(err));
   });
 }
-//Construct movie details lookup URL
-function getMovieDetails(_apiKey, _movieID, _movieProperties = []) {
-  if (!_apiKey) throw Error(`Valid APIKey must be passed : ${_apiKey}`);
-  if (!_movieID) throw Error(`MovieID  must be passed : ${_movieID}`);
 
+//Consturcts the URL to fetch Movie Details
+function getMoviesDetailsURL(_apiKey, _movieID, _movieProperties = []) {
   let movieDetailsURL = `https://api.themoviedb.org/3/movie/[MOVIE_ID]?api_key=[API_KEY]&append_to_response=[MOVIE_PROPERTIES]`; //videos,images OR videos OR images
   movieDetailsURL = movieDetailsURL
     .split("[API_KEY]")
@@ -52,20 +63,34 @@ function getMovieDetails(_apiKey, _movieID, _movieProperties = []) {
     .split("[MOVIE_ID]")
     .join(_movieID);
 
+  //Compose append_to_response from  MovieProperties array
   if (_movieProperties.length > 0) {
     movieDetailsURL = movieDetailsURL
       .split("[MOVIE_PROPERTIES]")
       .join(_movieProperties.join(","));
   }
+  return movieDetailsURL;
+}
+
+//get all details of the movie using getMovieID()
+function getMovieDetails(_apiKey, _movieID, _movieProperties = []) {
+  if (!_apiKey) throw Error(`Valid APIKey must be passed : ${_apiKey}`);
+  if (!_movieID) throw Error(`A valid movieID must be passed : ${_movieID}`);
+
+  let movieDetailsURL = getMoviesDetailsURL(
+    _apiKey,
+    _movieID,
+    _movieProperties
+  );
 
   return new Promise((resolve, reject) => {
     fetch(movieDetailsURL)
       .then(res => {
         res
           .json()
-          .then(movie => {
+          .then(_movieResult => {
             //If the movie array is empty search wasnt succesful
-            if (!movie)
+            if (!_movieResult)
               reject(
                 Error(`Lookup for movie name ${movieID} didn't return results`)
               );
@@ -79,12 +104,10 @@ function getMovieDetails(_apiKey, _movieID, _movieProperties = []) {
                 results: [video]
               },
               images: { posters },
-              genres
-            } = movie;
-
-            //var {videos:{results:[video]}} = movie
-            //var {videos:{results:[video]}} = movie
-            //var {key: videoKey, site: videoSite}= video
+              genres,
+              credits: { cast: castObjList },
+              credits: { crew: crewObjList }
+            } = _movieResult;
 
             //Extract the first poster meeting the width criterion
             let posterURL = null;
@@ -98,33 +121,67 @@ function getMovieDetails(_apiKey, _movieID, _movieProperties = []) {
               }
             });
 
-            //concatenate Youtube results //TODO: implement other video sites
-            function videoURL() {
-              return video.site == "YouTube"
-                ? `https://www.youtube.com/watch?v=${video.key}`
-                : `Video site : ${video.site} video key : ${video.key}`;
-            }
-
             //Stringfy the Generes
-            genresString = "";
+            let genresString = "";
             genres.forEach(genre => {
               genresString += `${genre.name}, `;
             });
 
+            //Extract details of actors
+            let leadActorsString = "";
+            let castString = "";
+            castObjList.forEach((castObj, index) => {
+              castString = castString.concat(castObj.name, ", ");
+              //add only top 4 actors as lead actors
+              if (castObjList.length >= 4 && index < 4) {
+                leadActorsString = leadActorsString.concat(castObj.name, ", ");
+              }
+            });
 
+            var crew = { director: "", musicDirector: "" };
+
+            //Identify crew
+            crewObjList.forEach((_crew, index) => {
+              switch (_crew.department) {
+                case "Directing":
+                  crew.director = crew.director.concat(_crew.name, ", ");
+                  break;
+                case "Sound":
+                  crew.musicDirector = crew.musicDirector.concat(
+                    _crew.name,
+                    ", "
+                  );
+                  break;
+              }
+            });
+
+            //Trim trailing commas - Need to find a way to do below with other properties
+            crew.director = stripTrailingCommas(crew.director);
+            crew.musicDirector = stripTrailingCommas(crew.musicDirector);
             //compose a partial movice object
-            var _movie = {
+            var movie = {
               movieID,
               title,
               language,
               synopsis,
-              trailer: videoURL(),
+              trailer: "",
               poster: posterURL,
-              genres: genresString.replace(/,\s*$/, "")
+              genres: stripTrailingCommas(genresString),
+              cast: stripTrailingCommas(castString),
+              leadActors: stripTrailingCommas(leadActorsString),
+              crew
             };
 
-            console.log(_movie);
-            resolve(_movie);
+            //resolve trailer link -- "Cleaner way to do this ?"
+            if (
+              !(video === undefined) &&
+              !(video.site === undefined) &&
+              video.site == "YouTube"
+            ) {
+              movie.trailer = `https://www.youtube.com/watch?v=${video.key}`;
+            }
+
+            resolve(movie);
           })
           .catch(err => reject(err));
       })
@@ -146,27 +203,36 @@ function getMoviePosterURL(_posterFile, _width) {
     .join(_posterFile);
 }
 
-// 1. Load the configuration
-
-// 3. Look up additional trailer and poster info
-
-function retrieveMovie(apiKey = null, movieName, properties = []) {
-  getMovieID(movieAPIKey, "venom")
-    .then(movieID => {
-      getMovieDetails(movieAPIKey, movieID, properties)
-        .then(data => console.log(data))
-        .catch(err => {
-          console.log(err);
-        });
-    })
-    .catch(err => {
-      console.log(err);
-    });
+//Retieve moive detals with helper functions
+function retrieveMovie(apiKey, movieName, properties = []) {
+  return new Promise((resolve, reject) => {
+    getMovieID(apiKey, movieName)
+      .then(movieid => {
+        getMovieDetails(movieAPIKey, movieid, properties)
+          .then(movie => {
+            resolve(movie); // resolve promise with all movie details
+          })
+          .catch(err => {
+            reject(
+              `Error: Unable to retrieve Movie Details for ${movieName} with ID ${movieid}`
+            );
+          }); //getMovieDetails().catch()
+      })
+      .catch(err => {
+        reject(`Error: Unable to retrieve Movie ID  for movie ${movieName}`);
+      }); //getMovieID().catch()
+  }); //return new Promise()
 }
 
-retrieveMovie("alien", null, ["videos", "images"]);
-//module.exports = retrieveMovie;
-
-// console.log(getMovieSearchURL("ABC123", "padam"));
-// console.log(getMovieDetailsURL("ABC123", 123354, ["video", "poster"]));
-// console.log(getMoviePosterURL("filename.png", 400));
+ //let testMovies = ["chekka chivantha vaanam", "venom", "minnale", "titanic"];
+ //let testMovies = ["paw patrol", "cars", "rapunzel", "cinderella"];
+let testMovies = ["Kadaikutty Singam"];
+testMovies.forEach(movieitem => {
+  retrieveMovie(movieAPIKey, movieitem, ["videos", "images", "credits"]).then(
+    movie => {
+      // console.log(JSON.parse(JSON.stringify(movie, null, "")));
+      console.log(JSON.stringify(movie,null,2));
+      //movie.json().then(jsonString => console.log(jsonString));
+    }
+  );
+});

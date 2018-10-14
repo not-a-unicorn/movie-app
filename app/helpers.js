@@ -31,8 +31,12 @@ exports.siteName = process.env.SITE_NAME || "Indian Movies";
 
 exports.menu = [{ slug: "/stores", title: "Stores", icon: "store" }, { slug: "/tags", title: "Tags", icon: "tag" }, { slug: "/top", title: "Top", icon: "top" }, { slug: "/add", title: "Add", icon: "add" }, { slug: "/map", title: "Map", icon: "map" }];
 
-// export function () removeLastComma(strng){        
+// export function () removeLastComma(strng){
 //   var n=strng.lastIndexOf(",");
-//   var a=strng.substring(0,n) 
+//   var a=strng.substring(0,n)
 //   return a;
 // }
+
+exports.stripTrailingCommas = function (_string) {
+  return _string.replace(/,\s*$/, "");
+};

@@ -31,8 +31,15 @@ exports.menu = [
   { slug: "/map", title: "Map", icon: "map" }
 ];
 
-// export function () removeLastComma(strng){        
+// export function () removeLastComma(strng){
 //   var n=strng.lastIndexOf(",");
-//   var a=strng.substring(0,n) 
+//   var a=strng.substring(0,n)
 //   return a;
 // }
+
+exports.stripTrailingCommas = function(_string) {
+  return _string.replace(/,\s*$/, "");
+};
+
+
+
