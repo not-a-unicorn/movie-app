@@ -5,8 +5,8 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch App.js",
-      "program": "${workspaceRoot}/src/appBackend.js",
+      "name": "Launch Start.js",
+      "program": "${workspaceRoot}/app/start.js",
       "outFiles": ["${workspaceRoot}/app/**/*.js"]
     },
     {

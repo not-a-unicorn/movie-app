@@ -29,6 +29,7 @@ function getMovieID(_apiKey, _movieName) {
   if (!_movieName) throw Error(`Movie name must be passed : ${_movieName}`);
 
   let searchURL = getMovieIDURL(_apiKey, _movieName);
+  console.log(`*****Movie ID ${searchURL}`);
 
   return new Promise((resolve, reject) => {
     fetch(searchURL)
@@ -73,7 +74,11 @@ function getMoviesDetailsURL(_apiKey, _movieID, _movieProperties = []) {
 }
 
 //get all details of the movie using getMovieID()
-function getMovieDetails(_apiKey, _movieID, _movieProperties = []) {
+function getMovieDetails(
+  _apiKey = movieAPIKey,
+  _movieID,
+  _movieProperties = []
+) {
   if (!_apiKey) throw Error(`Valid APIKey must be passed : ${_apiKey}`);
   if (!_movieID) throw Error(`A valid movieID must be passed : ${_movieID}`);
 
@@ -83,6 +88,7 @@ function getMovieDetails(_apiKey, _movieID, _movieProperties = []) {
     _movieProperties
   );
 
+  console.log(`*****Movie Details ${movieDetailsURL}`);
   return new Promise((resolve, reject) => {
     fetch(movieDetailsURL)
       .then(res => {
@@ -204,7 +210,7 @@ function getMoviePosterURL(_posterFile, _width) {
 }
 
 //Retieve moive detals with helper functions
-function retrieveMovie(apiKey, movieName, properties = []) {
+function retrieveMovie(apiKey = movieAPIKey, movieName, properties = []) {
   return new Promise((resolve, reject) => {
     getMovieID(apiKey, movieName)
       .then(movieid => {
@@ -224,15 +230,15 @@ function retrieveMovie(apiKey, movieName, properties = []) {
   }); //return new Promise()
 }
 
- //let testMovies = ["chekka chivantha vaanam", "venom", "minnale", "titanic"];
- //let testMovies = ["paw patrol", "cars", "rapunzel", "cinderella"];
-let testMovies = ["Kadaikutty Singam"];
-testMovies.forEach(movieitem => {
-  retrieveMovie(movieAPIKey, movieitem, ["videos", "images", "credits"]).then(
-    movie => {
-      // console.log(JSON.parse(JSON.stringify(movie, null, "")));
-      console.log(JSON.stringify(movie,null,2));
-      //movie.json().then(jsonString => console.log(jsonString));
-    }
-  );
-});
+// //let testMovies = ["Kadaikutty Singam", "chekka chivantha vaanam", "venom", "minnale", "titanic", "Kaakha Kaakha", "cinderella"];
+// testMovies.forEach(movieitem => {
+//   retrieveMovie(movieAPIKey, movieitem, ["videos", "images", "credits"]).then(
+//     movie => {
+//       // console.log(JSON.parse(JSON.stringify(movie, null, "")));
+//       console.log(JSON.stringify(movie, null, 2));
+//       //movie.json().then(jsonString => console.log(jsonString));
+//     }
+//   );
+// });
+
+export { retrieveMovie };

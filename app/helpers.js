@@ -40,3 +40,20 @@ exports.menu = [{ slug: "/stores", title: "Stores", icon: "store" }, { slug: "/t
 exports.stripTrailingCommas = function (_string) {
   return _string.replace(/,\s*$/, "");
 };
+
+exports.getAppMode = function () {
+  var appMode = process.env.NODE_ENV.toLowerCase();
+  console.log(appMode);
+  switch (true) {
+    case !appMode:
+      console.log("!!!!! Application mode not defined in .env file / web server");
+      return "Undefined";
+      break;
+
+    case appMode == "production":
+      return "PROD";
+      break;
+    case appMode == "development":
+      return "DEV";
+  }
+};

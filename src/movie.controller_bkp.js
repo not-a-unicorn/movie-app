@@ -144,25 +144,3 @@ exports.movie_createbulk = function(req, res) {
       console.log(e);
     });
 };
-
-exports.searchMovie = async (req, res) => {
-  console.log("--------------In searchMovie");
-  console.log("----+ " + req.query.q);
-  const movies = await Movie.find(
-    {
-      $text: {
-        $search: req.query.q
-      }
-    },
-    {
-      score: { $meta: "textScore" }
-    }
-  )
-    // the sort them
-    .sort({
-      score: { $meta: "textScore" }
-    })
-    // limit to only 5 results
-    .limit(5);
-  res.json(movies);
-};

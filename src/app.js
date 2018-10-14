@@ -7,8 +7,8 @@ require("dotenv").config();
 const path = require("path"); // remove later
 
 //import appwide routes
-import appRoutes from "./app.route";
-import movieRoutes from "./movie.route";
+import routes from "./app.routes";
+
 
 
 
@@ -38,8 +38,7 @@ app.use((req, res, next) => {
 // app.use(express.static(path.join(__dirname, 'public')));
 
 //Assign Route definitions to the request
-app.use("/", appRoutes);
-app.use(["/movie", "/movies"], movieRoutes);
+app.use('/', routes);
 
 let port = process.env.PORT || 5000;
 

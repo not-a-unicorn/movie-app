@@ -1,41 +1,63 @@
 "use strict";
 
+var _ref;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var mongoose = require("mongoose");
+mongoose.Promise = global.Promise;
+var slug = require("slugs");
 
 var Schema = mongoose.Schema;
 
-//Movie Sessions
-var SessionSchema = new Schema({
-  _id: { type: Schema.ObjectId, auto: true },
-  state: { type: "String" },
-  location: { type: "String" },
-  cinema: { type: "String" },
-  sessionDateTime: ["String"],
-  ticketLink: { type: Schema.Types.String }
+//Movie
+var movieSchema = new Schema((_ref = {
+  _id: {
+    type: Schema.ObjectId,
+    auto: true
+  },
+  title: {
+    type: String,
+    trim: true,
+    required: "Must have movie title"
+  },
+  slug: String, //for browsing movie details directly
+  language: { type: String },
+  leadActors: [String],
+  rating: Number,
+  tags: [String],
+  synopsis: String,
+  trailer: String,
+  poster: String,
+  backdrop: String
+}, _defineProperty(_ref, "leadActors", [String]), _defineProperty(_ref, "cast", [String]), _defineProperty(_ref, "crew", {
+  director: [String],
+  musicDirector: [String]
+}), _defineProperty(_ref, "sessions", {
+  type: mongoose.Schema.ObjectId,
+  ref: "Session"
+}), _defineProperty(_ref, "created", {
+  type: Date,
+  default: Date.now
+}), _defineProperty(_ref, "Update", {
+  type: Date,
+  default: Date.now
+}), _ref));
+
+// Define  indexes
+movieSchema.index({
+  title: "text",
+  language: "text"
 });
 
-//Movie
-var MovieSchema = new Schema({
-  _id: { type: Schema.ObjectId, auto: true },
-  title: { type: "String", required: [true, "must have movie title"] },
-  language: { type: "String" },
-  synopsis: { type: "String" },
-  trailer: { type: "String" },
-  poster: { type: "String" },
-  leadActors: { type: "String" },
-  cast: { type: "String" },
-  crew: {
-    director: { type: "String" },
-    musicDirector: { type: "String" }
-  },
-  sessions: {
-    type: [SessionSchema]
-  }
-});
+movieSchema.index({ synopsis: "text" });
+
+function autopopulate(next) {
+  this.populate("title");
+  next();
+}
+movieSchema.pre("find", autopopulate);
+movieSchema.pre("findOne", autopopulate);
 
 // Export the model
-//module.exports = mongoose.model("Movie", MovieSchema);
-module.exports = {
-  Movie: mongoose.model("Movie", MovieSchema),
-  Session: mongoose.model("Session", SessionSchema)
-};
+module.exports = mongoose.model("Movie", movieSchema);

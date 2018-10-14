@@ -1,12 +1,8 @@
 "use strict";
 
-var _app = require("./app.route");
+var _app = require("./app.routes");
 
 var _app2 = _interopRequireDefault(_app);
-
-var _movie = require("./movie.route");
-
-var _movie2 = _interopRequireDefault(_movie);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -44,8 +40,7 @@ app.use(function (req, res, next) {
 // app.use(express.static(path.join(__dirname, 'public')));
 
 //Assign Route definitions to the request
-app.use("/", _app2.default);
-app.use(["/movie", "/movies"], _movie2.default);
+app.use('/', _app2.default);
 
 var port = process.env.PORT || 5000;
 

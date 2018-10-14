@@ -1,7 +1,5 @@
 "use strict";
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
 var _require = require("./movie.model"),
     Movie = _require.Movie;
 
@@ -141,45 +139,3 @@ exports.movie_createbulk = function (req, res) {
     console.log(e);
   });
 };
-
-exports.searchMovie = function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
-    var movies;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            console.log("--------------In searchMovie");
-            console.log("----+ " + req.query.q);
-            _context.next = 4;
-            return Movie.find({
-              $text: {
-                $search: req.query.q
-              }
-            }, {
-              score: { $meta: "textScore" }
-            })
-            // the sort them
-            .sort({
-              score: { $meta: "textScore" }
-            })
-            // limit to only 5 results
-            .limit(5);
-
-          case 4:
-            movies = _context.sent;
-
-            res.json(movies);
-
-          case 6:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, undefined);
-  }));
-
-  return function (_x, _x2) {
-    return _ref.apply(this, arguments);
-  };
-}();

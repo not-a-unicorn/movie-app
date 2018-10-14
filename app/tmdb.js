@@ -1,5 +1,9 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 //@Theepan Thevathasan
@@ -29,6 +33,7 @@ function getMovieID(_apiKey, _movieName) {
   if (!_movieName) throw Error("Movie name must be passed : " + _movieName);
 
   var searchURL = getMovieIDURL(_apiKey, _movieName);
+  console.log("*****Movie ID " + searchURL);
 
   return new Promise(function (resolve, reject) {
     fetch(searchURL).then(function (res) {
@@ -64,7 +69,11 @@ function getMoviesDetailsURL(_apiKey, _movieID) {
 }
 
 //get all details of the movie using getMovieID()
-function getMovieDetails(_apiKey, _movieID) {
+function getMovieDetails() {
+  var _apiKey = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : movieAPIKey;
+
+  var _movieID = arguments[1];
+
   var _movieProperties = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
 
   if (!_apiKey) throw Error("Valid APIKey must be passed : " + _apiKey);
@@ -72,6 +81,7 @@ function getMovieDetails(_apiKey, _movieID) {
 
   var movieDetailsURL = getMoviesDetailsURL(_apiKey, _movieID, _movieProperties);
 
+  console.log("*****Movie Details " + movieDetailsURL);
   return new Promise(function (resolve, reject) {
     fetch(movieDetailsURL).then(function (res) {
       res.json().then(function (_movieResult) {
@@ -175,7 +185,9 @@ function getMoviePosterURL(_posterFile, _width) {
 }
 
 //Retieve moive detals with helper functions
-function retrieveMovie(apiKey, movieName) {
+function retrieveMovie() {
+  var apiKey = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : movieAPIKey;
+  var movieName = arguments[1];
   var properties = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
 
   return new Promise(function (resolve, reject) {
@@ -191,13 +203,15 @@ function retrieveMovie(apiKey, movieName) {
   }); //return new Promise()
 }
 
-//let testMovies = ["chekka chivantha vaanam", "venom", "minnale", "titanic"];
-//let testMovies = ["paw patrol", "cars", "rapunzel", "cinderella"];
-var testMovies = ["Kadaikutty Singam"];
-testMovies.forEach(function (movieitem) {
-  retrieveMovie(movieAPIKey, movieitem, ["videos", "images", "credits"]).then(function (movie) {
-    // console.log(JSON.parse(JSON.stringify(movie, null, "")));
-    console.log(JSON.stringify(movie, null, 2));
-    //movie.json().then(jsonString => console.log(jsonString));
-  });
-});
+// //let testMovies = ["Kadaikutty Singam", "chekka chivantha vaanam", "venom", "minnale", "titanic", "Kaakha Kaakha", "cinderella"];
+// testMovies.forEach(movieitem => {
+//   retrieveMovie(movieAPIKey, movieitem, ["videos", "images", "credits"]).then(
+//     movie => {
+//       // console.log(JSON.parse(JSON.stringify(movie, null, "")));
+//       console.log(JSON.stringify(movie, null, 2));
+//       //movie.json().then(jsonString => console.log(jsonString));
+//     }
+//   );
+// });
+
+exports.retrieveMovie = retrieveMovie;
