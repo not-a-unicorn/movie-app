@@ -13,20 +13,17 @@ var getMovie = exports.getMovie = function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.next = 2;
-            return Movie.find({
-              $text: {
-                $search: "Venom"
-              }
-            });
+            console.log("in getMovie");
+            _context.next = 3;
+            return Movie.find();
 
-          case 2:
+          case 3:
             _movies = _context.sent;
 
 
             res.status(200).json(_movies);
 
-          case 4:
+          case 5:
           case "end":
             return _context.stop();
         }

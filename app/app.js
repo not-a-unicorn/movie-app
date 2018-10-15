@@ -10,9 +10,7 @@ var express = require("express");
 var app = express();
 var morgan = require("morgan");
 var bodyParser = require("body-parser");
-var mongoose = require("mongoose");
-require("dotenv").config();
-var path = require("path"); // remove later
+require("dotenv").config(); //  load environmental configs for in Dev
 
 //import appwide routes
 
@@ -20,6 +18,7 @@ var path = require("path"); // remove later
 //Web Server
 app.use(morgan("dev")); //HTTP request logger
 
+//Easy reading of request info
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -40,12 +39,24 @@ app.use(function (req, res, next) {
 // app.use(express.static(path.join(__dirname, 'public')));
 
 //Assign Route definitions to the request
-app.use('/', _app2.default);
+app.use("/", _app2.default);
 
-var port = process.env.PORT || 5000;
+//Error handling
+//404 - Not found
+app.use(function (req, res, next) {
+  var err = Error("Not found");
+  err.status = 404;
+  next(err);
+});
 
-// app.listen(port, () => {
-//   console.log("Movie App server is up and running on port numner " + port);
-// });
+//Global error handling
+app.use(function (err, req, res, next) {
+  res.status = err.status || 500;
+  res.json({
+    error: {
+      message: err.message
+    }
+  });
+});
 
 module.exports = app;

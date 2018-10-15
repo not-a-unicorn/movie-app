@@ -8,7 +8,7 @@ const slug = require("slugs");
 var Schema = mongoose.Schema;
 
 //Movie
-const movieSchema = Schema({
+const movieSchema = new Schema({
   // _id: {
   //   type: Schema.Types.ObjectId,
   //   auto: true,

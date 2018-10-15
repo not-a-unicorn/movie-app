@@ -6,13 +6,8 @@ var bodyParser = require("body-parser");
 var tmdb = require("./tmdb");
 
 export async function getMovie(req, res) {
-  // console.log("in getMovie");
-  // const _movies = await Movie.find();
-  const _movies = await Movie.find({
-    $text: {
-      $search: "Venom"
-    }
-  });
+  console.log("in getMovie");
+  const _movies = await Movie.find();
 
   res.status(200).json(_movies);
 }

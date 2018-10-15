@@ -1,6 +1,6 @@
 "use strict";
 
-var _Schema;
+var _ref;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -14,7 +14,7 @@ var slug = require("slugs");
 var Schema = mongoose.Schema;
 
 //Movie
-var movieSchema = Schema((_Schema = {
+var movieSchema = new Schema((_ref = {
   // _id: {
   //   type: Schema.Types.ObjectId,
   //   auto: true,
@@ -40,19 +40,19 @@ var movieSchema = Schema((_Schema = {
   genres: String,
   poster: String,
   backdrop: String
-}, _defineProperty(_Schema, "leadActors", [String]), _defineProperty(_Schema, "cast", [String]), _defineProperty(_Schema, "crew", {
+}, _defineProperty(_ref, "leadActors", [String]), _defineProperty(_ref, "cast", [String]), _defineProperty(_ref, "crew", {
   director: [String],
   musicDirector: [String]
-}), _defineProperty(_Schema, "sessions", {
+}), _defineProperty(_ref, "sessions", {
   type: Schema.Types.ObjectId,
   ref: "Session"
-}), _defineProperty(_Schema, "created", {
+}), _defineProperty(_ref, "created", {
   type: Date,
   default: Date.now
-}), _defineProperty(_Schema, "updated", {
+}), _defineProperty(_ref, "updated", {
   type: Date,
   default: Date.now
-}), _Schema));
+}), _ref));
 
 // Define  indexes
 movieSchema.index({
