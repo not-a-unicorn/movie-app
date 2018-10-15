@@ -3,29 +3,30 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getMovie = undefined;
 
-var createMovieByName = function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(_movieName) {
-    var dbMovie, modelMovie;
+var getMovie = exports.getMovie = function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
+    var _movies;
+
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return tmdb.retrieveMovie({ movieName: _movieName });
+            return Movie.find({
+              $text: {
+                $search: "Venom"
+              }
+            });
 
           case 2:
-            dbMovie = _context.sent;
-            modelMovie = new Movie({});
+            _movies = _context.sent;
 
-            Object.assign(modelMovie, dbMovie);
-            _context.next = 7;
-            return modelMovie.save();
 
-          case 7:
-            return _context.abrupt("return", modelMovie);
+            res.status(200).json(_movies);
 
-          case 8:
+          case 4:
           case "end":
             return _context.stop();
         }
@@ -33,25 +34,47 @@ var createMovieByName = function () {
     }, _callee, this);
   }));
 
-  return function createMovieByName(_x) {
+  return function getMovie(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
+//Add one or more movies based on name/s passed in the request body
 
-// .then(movie => {
-//   console.log(`Succesfully created movie ${movie.title}`);
-//   //res.send(`Succesfully created movie ${movie.title} ID ${movie.id}`);
-//
-//   //jsonReponse.push(JSON.stringify({ STATUS: msg, MOVIE: movie }));
 
-//   jsonReponse.push({ MOVIE: movie });
-//   console.log("&&&&&");
-//   console.log(jsonReponse);
-//   console.log("&&&&&");
-// })
-// .catch(err => {
-// });
+var createMovieByName = function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(_movieName) {
+    var dbMovie, modelMovie;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return tmdb.retrieveMovie({ movieName: _movieName });
 
+          case 2:
+            dbMovie = _context2.sent;
+            modelMovie = new Movie({});
+
+            Object.assign(modelMovie, dbMovie);
+
+            _context2.next = 7;
+            return modelMovie.save();
+
+          case 7:
+            return _context2.abrupt("return", modelMovie);
+
+          case 8:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this);
+  }));
+
+  return function createMovieByName(_x3) {
+    return _ref2.apply(this, arguments);
+  };
+}();
 
 exports.createMovie = createMovie;
 
@@ -66,7 +89,8 @@ var tmdb = require("./tmdb");
 
 function createMovie(req, res) {
   var movieNames = req.body.movieNames;
-  movieNames = (0, _util.isArray)(movieNames) ? movieNames : [movieNames]; //If one movie is passed a string turn it into an array
+  //If one movie is passed a string turn it into an array
+  movieNames = (0, _util.isArray)(movieNames) ? movieNames : [movieNames];
 
   var jsonReponse = [];
   var promises = [];
@@ -81,9 +105,9 @@ function createMovie(req, res) {
     movies.forEach(function (movie) {
       jsonReponse.push(movie);
     });
-    res.json(jsonReponse);
+    res.status(200).json(jsonReponse);
   }).catch(function (err) {
     console.log("Error creating movie/s  : " + movieNames.join() + " Error :  " + err);
-    res.send("Error creating movie/ " + movieNames.join() + " in database");
+    res.status(500).send("Error creating movie/ " + movieNames.join() + " in database");
   });
 }

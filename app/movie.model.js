@@ -15,10 +15,12 @@ var Schema = mongoose.Schema;
 
 //Movie
 var movieSchema = Schema((_Schema = {
-  _id: {
-    type: Schema.Types.ObjectId,
-    auto: true
-  },
+  // _id: {
+  //   type: Schema.Types.ObjectId,
+  //   auto: true,
+  //   required: true,
+  //   index: true
+  // },
   movieAPIID: {
     type: String,
     alias: "movieID"
@@ -57,7 +59,7 @@ movieSchema.index({
   title: "text"
 });
 
-movieSchema.index({ synopsis: "text" });
+// movieSchema.index({ synopsis: "text" });
 
 function autopopulate(next) {
   this.populate("title");
