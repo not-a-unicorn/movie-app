@@ -29,7 +29,6 @@ function getMovieID(_apiKey, _movieName) {
   if (!_movieName) throw Error(`Movie name must be passed : ${_movieName}`);
 
   let searchURL = getMovieIDURL(_apiKey, _movieName);
-  
 
   return new Promise((resolve, reject) => {
     fetch(searchURL)
@@ -87,7 +86,7 @@ function getMovieDetails(
     _movieID,
     _movieProperties
   );
-  
+
   return new Promise((resolve, reject) => {
     fetch(movieDetailsURL)
       .then(res => {
@@ -114,7 +113,7 @@ function getMovieDetails(
               credits: { cast: castObjList },
               credits: { crew: crewObjList }
             } = _movieResult;
-            
+
             //Extract the first poster meeting the width criterion
             let posterURL = null;
             let atLeastOnePoster = false;
@@ -158,11 +157,11 @@ function getMovieDetails(
 
             //Identify crew
             crewObjList.forEach((_crew, index) => {
-              switch (_crew.department) {
-                case "Directing":
+              switch (_crew.job) {
+                case "Director":
                   crew.director.push(_crew.name);
                   break;
-                case "Sound":
+                case "Original Music Composer":
                   crew.musicDirector.push(_crew.name);
                   break;
               }
@@ -218,7 +217,6 @@ function retrieveMovie({
   movieName,
   properties = ["videos", "images", "credits"]
 }) {
-  
   return new Promise((resolve, reject) => {
     getMovieID(apiKey, movieName)
       .then(movieid => {
@@ -238,6 +236,9 @@ function retrieveMovie({
   }); //return new Promise()
 }
 
+export { retrieveMovie };
+
+//TEST MODULE
 //let testMovies = ["Kadaikutty Singam", "chekka chivantha vaanam", "venom", "minnale", "titanic", "Kaakha Kaakha", "cinderella"];
 // ["videos", "images", "credits"]
 // let testMovies = ["Kadaikutty Singam"]
@@ -250,5 +251,3 @@ function retrieveMovie({
 //     }
 //   );
 // });
-
-export { retrieveMovie };

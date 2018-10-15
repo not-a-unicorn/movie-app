@@ -111,6 +111,7 @@ function createMovie(req, res) {
       clientResponse.content.push(movie);
     });
     res.status(200).json(clientResponse);
+    clientResponse.content = [];
   }).catch(function (err) {
     console.log("Error creating movie/s  : " + movieNames.join() + " Error :  " + err);
     clientResponse.status = "Error creating movie/s " + movieNames.join() + " in database";

@@ -17,7 +17,7 @@ export async function getMovie(req, res) {
   const _movies = await Movie.find();
 
   clientResponse.status = "successfully retrieved movies";
-  clientResponse.content.push (_movies);
+  clientResponse.content.push(_movies);
   res.status(200).json(clientResponse);
 }
 //Add one or more movies based on name/s passed in the request body
@@ -40,6 +40,7 @@ export function createMovie(req, res) {
         clientResponse.content.push(movie);
       });
       res.status(200).json(clientResponse);
+      clientResponse.content = [];
     })
     .catch(err => {
       console.log(
@@ -47,10 +48,7 @@ export function createMovie(req, res) {
       );
       clientResponse.status = `Error creating movie/s ${movieNames.join()} in database`;
       clientResponse.content = {};
-      res
-        .status(500)
-        .json(clientResponse)
-        
+      res.status(500).json(clientResponse);
     });
 }
 

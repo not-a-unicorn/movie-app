@@ -139,11 +139,11 @@ function getMovieDetails() {
 
         //Identify crew
         crewObjList.forEach(function (_crew, index) {
-          switch (_crew.department) {
-            case "Directing":
+          switch (_crew.job) {
+            case "Director":
               crew.director.push(_crew.name);
               break;
-            case "Sound":
+            case "Original Music Composer":
               crew.musicDirector.push(_crew.name);
               break;
           }
@@ -197,7 +197,6 @@ function retrieveMovie(_ref) {
       _ref$properties = _ref.properties,
       properties = _ref$properties === undefined ? ["videos", "images", "credits"] : _ref$properties;
 
-
   return new Promise(function (resolve, reject) {
     getMovieID(apiKey, movieName).then(function (movieid) {
       getMovieDetails(movieAPIKey, movieid, properties).then(function (movie) {
@@ -211,6 +210,9 @@ function retrieveMovie(_ref) {
   }); //return new Promise()
 }
 
+exports.retrieveMovie = retrieveMovie;
+
+//TEST MODULE
 //let testMovies = ["Kadaikutty Singam", "chekka chivantha vaanam", "venom", "minnale", "titanic", "Kaakha Kaakha", "cinderella"];
 // ["videos", "images", "credits"]
 // let testMovies = ["Kadaikutty Singam"]
@@ -223,5 +225,3 @@ function retrieveMovie(_ref) {
 //     }
 //   );
 // });
-
-exports.retrieveMovie = retrieveMovie;

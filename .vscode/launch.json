@@ -16,7 +16,8 @@
       "request": "launch",
       "name": "Launch Current File",
       "program": "${file}",
-      "outFiles": ["${workspaceRoot}/app/**/*.js"]
+      "outFiles": ["${workspaceRoot}/app/**/*.js"],
+      "runtimeExecutable": "babel-node"
     }
   ]
 }
