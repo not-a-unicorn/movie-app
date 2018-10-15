@@ -4,16 +4,19 @@
   "description": "Online directory for Indian movies currently showing in Australia",
   "main": "app/app.js",
   "scripts": {
-    "start": "node app/start.js",
+    "start": "npm run build && node ./app/start.js",
     "compile": "babel src --out-dir app  --watch",
+    "clean": "rm -rf app && mkdir app",
     "watch": "nodemon app/start.js --ignore public",
-    "dev": "concurrently \"npm run watch\" \"npm run compile\"",
+    "dev": "concurrently \"npm run clean\" \"npm run watch\" ",
     "locallaunch": "start chrome public/app.html",
     "test": "mocha -- app/**/test/*.js --recursive ||true",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive",
     "coverage-report": "start chrome coverage/lcov-report/index.html",
     "sample": "node ./app/data/loadSampleData.js",
-    "blowitallaway": "node ./app/data/loadSampleData.js --delete"
+    "blowitallaway": "node ./app/data/loadSampleData.js --delete",
+    "build-babel": "babel -d ./app ./src -s",
+    "build": "npm run clean && npm run build-babel --watch"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
