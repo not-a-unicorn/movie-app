@@ -106,10 +106,13 @@ function createMovie(req, res) {
 
   Promise.all(promises).then(function (movies) {
     console.log("Succesfully created movie/s " + movieNames.join());
-    clientResponse.status = "Succesfully created movie/s " + movieNames.join();
+
+    var moviesCreated = [];
     movies.forEach(function (movie) {
+      moviesCreated.push(movie.title);
       clientResponse.content.push(movie);
     });
+    clientResponse.status = "Succesfully created movie/s " + moviesCreated.join();
     res.status(200).json(clientResponse);
     clientResponse.content = [];
   }).catch(function (err) {

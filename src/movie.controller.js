@@ -35,10 +35,13 @@ export function createMovie(req, res) {
   Promise.all(promises)
     .then(movies => {
       console.log(`Succesfully created movie/s ${movieNames.join()}`);
-      clientResponse.status = `Succesfully created movie/s ${movieNames.join()}`;
+
+      let moviesCreated = [];
       movies.forEach(movie => {
+        moviesCreated.push(movie.title);
         clientResponse.content.push(movie);
       });
+      clientResponse.status = `Succesfully created movie/s ${moviesCreated.join()}`;
       res.status(200).json(clientResponse);
       clientResponse.content = [];
     })
