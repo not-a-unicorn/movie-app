@@ -21,9 +21,11 @@ var getMovie = exports.getMovie = function () {
             _movies = _context.sent;
 
 
-            res.status(200).json(_movies);
+            clientResponse.status = "successfully retrieved movies";
+            clientResponse.content.push(_movies);
+            res.status(200).json(clientResponse);
 
-          case 5:
+          case 7:
           case "end":
             return _context.stop();
         }
@@ -84,6 +86,13 @@ var Movie = require("./movie.model");
 var bodyParser = require("body-parser");
 var tmdb = require("./tmdb");
 
+//JSON reponse object
+
+var clientResponse = {
+  status: {},
+  content: []
+};
+
 function createMovie(req, res) {
   var movieNames = req.body.movieNames;
   //If one movie is passed a string turn it into an array
@@ -97,14 +106,15 @@ function createMovie(req, res) {
 
   Promise.all(promises).then(function (movies) {
     console.log("Succesfully created movie/s " + movieNames.join());
-    var msg = "Succesfully created movie/s " + movieNames.join();
-    jsonReponse.push({ Status: msg });
+    clientResponse.status = "Succesfully created movie/s " + movieNames.join();
     movies.forEach(function (movie) {
-      jsonReponse.push(movie);
+      clientResponse.content.push(movie);
     });
-    res.status(200).json(jsonReponse);
+    res.status(200).json(clientResponse);
   }).catch(function (err) {
     console.log("Error creating movie/s  : " + movieNames.join() + " Error :  " + err);
-    res.status(500).send("Error creating movie/ " + movieNames.join() + " in database");
+    clientResponse.status = "Error creating movie/s " + movieNames.join() + " in database";
+    clientResponse.content = {};
+    res.status(500).json(clientResponse);
   });
 }

@@ -22,6 +22,7 @@ app.use(morgan("dev")); //HTTP request logger
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+//Set headers
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
@@ -33,7 +34,6 @@ app.use(function (req, res, next) {
 });
 
 //Static files -- NEED TO DEBUG
-
 // const staticFiles = path.join(__dirname, "../../public");
 // console.log(`Static files : ${staticFiles}`);
 // app.use(express.static(path.join(__dirname, 'public')));

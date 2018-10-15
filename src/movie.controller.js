@@ -5,11 +5,20 @@ var Movie = require("./movie.model");
 var bodyParser = require("body-parser");
 var tmdb = require("./tmdb");
 
+//JSON reponse object
+
+let clientResponse = {
+  status: {},
+  content: []
+};
+
 export async function getMovie(req, res) {
   console.log("in getMovie");
   const _movies = await Movie.find();
 
-  res.status(200).json(_movies);
+  clientResponse.status = "successfully retrieved movies";
+  clientResponse.content.push (_movies);
+  res.status(200).json(clientResponse);
 }
 //Add one or more movies based on name/s passed in the request body
 export function createMovie(req, res) {
@@ -26,20 +35,22 @@ export function createMovie(req, res) {
   Promise.all(promises)
     .then(movies => {
       console.log(`Succesfully created movie/s ${movieNames.join()}`);
-      let msg = `Succesfully created movie/s ${movieNames.join()}`;
-      jsonReponse.push({ Status: msg });
+      clientResponse.status = `Succesfully created movie/s ${movieNames.join()}`;
       movies.forEach(movie => {
-        jsonReponse.push(movie);
+        clientResponse.content.push(movie);
       });
-      res.status(200).json(jsonReponse);
+      res.status(200).json(clientResponse);
     })
     .catch(err => {
       console.log(
         `Error creating movie/s  : ${movieNames.join()} Error :  ${err}`
       );
+      clientResponse.status = `Error creating movie/s ${movieNames.join()} in database`;
+      clientResponse.content = {};
       res
         .status(500)
-        .send(`Error creating movie/ ${movieNames.join()} in database`);
+        .json(clientResponse)
+        
     });
 }
 
