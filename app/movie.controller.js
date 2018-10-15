@@ -1,185 +1,89 @@
 "use strict";
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var _require = require("./movie.model"),
-    Movie = _require.Movie;
-
-var _require2 = require("./session.model"),
-    Session = _require2.Session;
-
-var _require3 = require("./cinema.model"),
-    Cinema = _require3.Cinema;
-
-var bodyParser = require("body-parser");
-
-var _require4 = require("./movie.response"),
-    getStatus = _require4.getStatus;
-
-var mongoose = require("mongoose");
-
-var _require5 = require("./tmdb"),
-    retrieveMovie = _require5.retrieveMovie;
-
-//Simple version, without validation or sanitation
-
-
-exports.test = function (req, res) {
-  console.log("in Test");
-  res.send("Test Controller for the movie endpoint");
-};
-
-//Lookp movie with id
-exports.movie_details = function (req, res) {
-  Movie.findById(req.params.id, function (err, movie) {
-    if (err) return next(err);
-    res.send(movie);
-  });
-};
-
-//Lookup all movies
-exports.movie_dedetailsAll = function (req, res) {
-  console.log("in /movie");
-  Movie.find(function (err, movies) {
-    if (err) return err;
-    res.status(200).json(movies);
-    //res.send(movie);
-  });
-};
-
-//Delete movie with id
-exports.movie_delete = function (req, res) {
-  Movie.findByIdAndRemove(req.params.id, function (err) {
-    if (err) return next(err);
-    res.send("Deleted successfully!");
-  });
-};
-
-//Update movie with id
-exports.movie_update = function (req, res) {
-  Movie.findByIdAndUpdate(req.params.id, { $set: req.body }, function (err, movie) {
-    if (err) return next(err);
-    res.send("Product udpated.");
-  });
-};
-
-//Create new movie
-exports.movie_create = function (req, res) {
-  console.log("in product route");
-  var movie = new Movie({
-    name: req.headers.name,
-    price: req.headers.price
-    //name: "orang",
-    // price: "20"
-  });
-  console.log("product " + movie);
-
-  movie.save(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.send("Product Created successfully");
-  });
-};
-
-//Create Movies from IMDB
-exports.movie_createbulk = function (req, res) {
-  var moviename = req.body.movies;
-  retrieveMovie("5066229b476a9c157a74692454f7661e", moviename, ["videos", "images", "credits"]).then(function (_movie) {
-    //Add dummy sesions
-    var sessions = [new Session({
-      _sesionid: new mongoose.Types.ObjectId(),
-      state: "VIC",
-      location: "Dandenong",
-      cinema: "Event",
-      sessionDateTime: ["27/09/2018 18:00"],
-      ticketLink: "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
-    }), new Session({
-      _sesionid: new mongoose.Types.ObjectId(),
-      state: "NSW",
-      location: "Liverpool ",
-      cinema: "Event Cinemas",
-      sessionDateTime: ["27/09/2018 18:00", "27/09/2018 21:00", "27/09/2018 15:00"],
-      ticketLink: "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
-    }), new Session({
-      _sesionid: new mongoose.Types.ObjectId(),
-      state: "ACT",
-      location: "Canberra",
-      cinema: "Event",
-      sessionDateTime: ["27/09/2018 18:00"],
-      ticketLink: "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
-    })]; //New Session
-
-    //Movie
-    var movie = new Movie({
-      title: _movie.title,
-      language: _movie.languages,
-      synopsis: _movie.plot,
-      trailer: _movie.trailer,
-      poster: _movie.poster,
-      leadActors: _movie.leadActors,
-      cast: _movie.cast,
-      crew: {
-        director: _movie.crew.director,
-        musicDirector: _movie.crew.musicDirector
-      },
-      sessions: sessions
-    }); //new Movie
-    console.log(_movie.director);
-    movie.save(function (err) {
-      if (err) {
-        //return next(err);
-        console.log("Error occured in saving movie " + movie.title + " " + err);
-        res.send("{Error : " + e);
-      }
-      res.status(200).json("{Success : Movie  created} " + movie);
-    });
-  }) //then
-  .catch(function (e) {
-    res.status(404).json({ Error: "Movie doesnt exist" });
-
-    console.log(e);
-  });
-};
-
-exports.searchMovie = function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
-    var movies;
+var createMovieByName = function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(_movieName) {
+    var dbMovie, modelMovie;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log("--------------In searchMovie");
-            console.log("----+ " + req.query.q);
-            _context.next = 4;
-            return Movie.find({
-              $text: {
-                $search: req.query.q
-              }
-            }, {
-              score: { $meta: "textScore" }
-            })
-            // the sort them
-            .sort({
-              score: { $meta: "textScore" }
-            })
-            // limit to only 5 results
-            .limit(5);
+            _context.next = 2;
+            return tmdb.retrieveMovie({ movieName: _movieName });
 
-          case 4:
-            movies = _context.sent;
+          case 2:
+            dbMovie = _context.sent;
+            modelMovie = new Movie({});
 
-            res.json(movies);
+            Object.assign(modelMovie, dbMovie);
+            _context.next = 7;
+            return modelMovie.save();
 
-          case 6:
+          case 7:
+            return _context.abrupt("return", modelMovie);
+
+          case 8:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, undefined);
+    }, _callee, this);
   }));
 
-  return function (_x, _x2) {
+  return function createMovieByName(_x) {
     return _ref.apply(this, arguments);
   };
 }();
+
+// .then(movie => {
+//   console.log(`Succesfully created movie ${movie.title}`);
+//   //res.send(`Succesfully created movie ${movie.title} ID ${movie.id}`);
+//
+//   //jsonReponse.push(JSON.stringify({ STATUS: msg, MOVIE: movie }));
+
+//   jsonReponse.push({ MOVIE: movie });
+//   console.log("&&&&&");
+//   console.log(jsonReponse);
+//   console.log("&&&&&");
+// })
+// .catch(err => {
+// });
+
+
+exports.createMovie = createMovie;
+
+var _util = require("util");
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+//import { Movie } from "./movie.model";
+var Movie = require("./movie.model");
+var bodyParser = require("body-parser");
+var tmdb = require("./tmdb");
+
+function createMovie(req, res) {
+  var movieNames = req.body.movieNames;
+  movieNames = (0, _util.isArray)(movieNames) ? movieNames : [movieNames]; //If one movie is passed a string turn it into an array
+
+  var jsonReponse = [];
+  var promises = [];
+  movieNames.forEach(function (movieName) {
+    promises.push(Promise.resolve(createMovieByName(movieName)));
+  });
+
+  Promise.all(promises).then(function (movies) {
+    console.log("Succesfully created movie/s " + movieNames.join());
+    var msg = "Succesfully created movie/s " + movieNames.join();
+    jsonReponse.push({ Status: msg });
+    movies.forEach(function (movie) {
+      jsonReponse.push(movie);
+    });
+    res.json(jsonReponse);
+  }).catch(function (err) {
+    console.log("Error creating movie/s  : " + movieNames.join() + " Error :  " + err);
+    res.send("Error creating movie/ " + movieNames.join() + " in database");
+  });
+}

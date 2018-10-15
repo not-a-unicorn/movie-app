@@ -29,7 +29,7 @@ function getMovieID(_apiKey, _movieName) {
   if (!_movieName) throw Error(`Movie name must be passed : ${_movieName}`);
 
   let searchURL = getMovieIDURL(_apiKey, _movieName);
-  console.log(`*****Movie ID ${searchURL}`);
+  
 
   return new Promise((resolve, reject) => {
     fetch(searchURL)
@@ -87,8 +87,7 @@ function getMovieDetails(
     _movieID,
     _movieProperties
   );
-
-  console.log(`*****Movie Details ${movieDetailsURL}`);
+  
   return new Promise((resolve, reject) => {
     fetch(movieDetailsURL)
       .then(res => {
@@ -111,14 +110,18 @@ function getMovieDetails(
               },
               images: { posters },
               genres,
+              rating,
               credits: { cast: castObjList },
               credits: { crew: crewObjList }
             } = _movieResult;
-
+            
             //Extract the first poster meeting the width criterion
             let posterURL = null;
+            let atLeastOnePoster = false;
+            const maxPosterHeight = 1080;
             posters.forEach(poster => {
-              if (poster.height <= 1080) {
+              atLeastOnePoster = true;
+              if (poster.height <= maxPosterHeight) {
                 posterURL = getMoviePosterURL(
                   poster.file_path.split("/").join(""),
                   500
@@ -126,67 +129,67 @@ function getMovieDetails(
                 return;
               }
             });
+            //pop the first poster in of there no posters smaller than maxPosterHeight but there are still some big posters
+            if (atLeastOnePoster && posters.length > 0) {
+              posterURL = getMoviePosterURL(
+                posters[0].file_path.split("/").join(""),
+                500
+              );
+            }
 
             //Stringfy the Generes
-            let genresString = "";
+            let genresArray = [];
             genres.forEach(genre => {
-              genresString += `${genre.name}, `;
+              genresArray.push(genre.name);
             });
 
             //Extract details of actors
-            let leadActorsString = "";
-            let castString = "";
+            let leadActorsArray = [];
+            let castArray = [];
             castObjList.forEach((castObj, index) => {
-              castString = castString.concat(castObj.name, ", ");
+              castArray.push(castObj.name);
               //add only top 4 actors as lead actors
               if (castObjList.length >= 4 && index < 4) {
-                leadActorsString = leadActorsString.concat(castObj.name, ", ");
+                leadActorsArray.push(castObj.name);
               }
             });
 
-            var crew = { director: "", musicDirector: "" };
+            var crew = { director: [], musicDirector: [] };
 
             //Identify crew
             crewObjList.forEach((_crew, index) => {
               switch (_crew.department) {
                 case "Directing":
-                  crew.director = crew.director.concat(_crew.name, ", ");
+                  crew.director.push(_crew.name);
                   break;
                 case "Sound":
-                  crew.musicDirector = crew.musicDirector.concat(
-                    _crew.name,
-                    ", "
-                  );
+                  crew.musicDirector.push(_crew.name);
                   break;
               }
             });
 
-            //Trim trailing commas - Need to find a way to do below with other properties
-            crew.director = stripTrailingCommas(crew.director);
-            crew.musicDirector = stripTrailingCommas(crew.musicDirector);
             //compose a partial movice object
             var movie = {
               movieID,
               title,
               language,
               synopsis,
+              rating,
               trailer: "",
               poster: posterURL,
-              genres: stripTrailingCommas(genresString),
-              cast: stripTrailingCommas(castString),
-              leadActors: stripTrailingCommas(leadActorsString),
+              genres: genresArray,
+              cast: castArray,
+              leadActors: leadActorsArray,
               crew
             };
 
             //resolve trailer link -- "Cleaner way to do this ?"
-            if (
-              !(video === undefined) &&
-              !(video.site === undefined) &&
-              video.site == "YouTube"
-            ) {
-              movie.trailer = `https://www.youtube.com/watch?v=${video.key}`;
-            }
-
+            if (!(video === undefined) && !(video.site === undefined))
+              if (video.site == "YouTube") {
+                movie.trailer = `https://www.youtube.com/watch?v=${video.key}`;
+              } else {
+                movie.trailer = `Site : ${video.site}  Video Key: ${video.key}`;
+              }
             resolve(movie);
           })
           .catch(err => reject(err));
@@ -210,7 +213,12 @@ function getMoviePosterURL(_posterFile, _width) {
 }
 
 //Retieve moive detals with helper functions
-function retrieveMovie(apiKey = movieAPIKey, movieName, properties = []) {
+function retrieveMovie({
+  apiKey = movieAPIKey,
+  movieName,
+  properties = ["videos", "images", "credits"]
+}) {
+  
   return new Promise((resolve, reject) => {
     getMovieID(apiKey, movieName)
       .then(movieid => {
@@ -220,7 +228,7 @@ function retrieveMovie(apiKey = movieAPIKey, movieName, properties = []) {
           })
           .catch(err => {
             reject(
-              `Error: Unable to retrieve Movie Details for ${movieName} with ID ${movieid}`
+              `Error: Unable to retrieve Movie Details for ${movieName} with ID ${movieid} ${err}`
             );
           }); //getMovieDetails().catch()
       })
@@ -230,9 +238,11 @@ function retrieveMovie(apiKey = movieAPIKey, movieName, properties = []) {
   }); //return new Promise()
 }
 
-// //let testMovies = ["Kadaikutty Singam", "chekka chivantha vaanam", "venom", "minnale", "titanic", "Kaakha Kaakha", "cinderella"];
+//let testMovies = ["Kadaikutty Singam", "chekka chivantha vaanam", "venom", "minnale", "titanic", "Kaakha Kaakha", "cinderella"];
+// ["videos", "images", "credits"]
+// let testMovies = ["Kadaikutty Singam"]
 // testMovies.forEach(movieitem => {
-//   retrieveMovie(movieAPIKey, movieitem, ["videos", "images", "credits"]).then(
+//   retrieveMovie( {movieName : movieitem}).then(
 //     movie => {
 //       // console.log(JSON.parse(JSON.stringify(movie, null, "")));
 //       console.log(JSON.stringify(movie, null, 2));

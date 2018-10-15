@@ -1,20 +1,27 @@
 "use strict";
 
-var _ref;
+var _Schema;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+require("regenerator-runtime/runtime");
+
 var mongoose = require("mongoose");
+var tmdb = require("./tmdb");
 mongoose.Promise = global.Promise;
 var slug = require("slugs");
 
 var Schema = mongoose.Schema;
 
 //Movie
-var movieSchema = new Schema((_ref = {
+var movieSchema = Schema((_Schema = {
   _id: {
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     auto: true
+  },
+  movieAPIID: {
+    type: String,
+    alias: "movieID"
   },
   title: {
     type: String,
@@ -28,26 +35,26 @@ var movieSchema = new Schema((_ref = {
   tags: [String],
   synopsis: String,
   trailer: String,
+  genres: String,
   poster: String,
   backdrop: String
-}, _defineProperty(_ref, "leadActors", [String]), _defineProperty(_ref, "cast", [String]), _defineProperty(_ref, "crew", {
+}, _defineProperty(_Schema, "leadActors", [String]), _defineProperty(_Schema, "cast", [String]), _defineProperty(_Schema, "crew", {
   director: [String],
   musicDirector: [String]
-}), _defineProperty(_ref, "sessions", {
-  type: mongoose.Schema.ObjectId,
+}), _defineProperty(_Schema, "sessions", {
+  type: Schema.Types.ObjectId,
   ref: "Session"
-}), _defineProperty(_ref, "created", {
+}), _defineProperty(_Schema, "created", {
   type: Date,
   default: Date.now
-}), _defineProperty(_ref, "Update", {
+}), _defineProperty(_Schema, "updated", {
   type: Date,
   default: Date.now
-}), _ref));
+}), _Schema));
 
 // Define  indexes
 movieSchema.index({
-  title: "text",
-  language: "text"
+  title: "text"
 });
 
 movieSchema.index({ synopsis: "text" });
@@ -59,5 +66,13 @@ function autopopulate(next) {
 movieSchema.pre("find", autopopulate);
 movieSchema.pre("findOne", autopopulate);
 
+// var __movie = movieSchema.statics
+//   .createMovieByName("Kadaikutty Singam")
+//   .then(__movie => {
+//     console.log(__movie);
+//   });
+
+console.log("-------------in this file " + __filename);
 // Export the model
+//export default mongoose.model("Movie", movieSchema);
 module.exports = mongoose.model("Movie", movieSchema);

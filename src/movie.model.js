@@ -1,14 +1,21 @@
+require("regenerator-runtime/runtime");
+
 const mongoose = require("mongoose");
+const tmdb = require("./tmdb");
 mongoose.Promise = global.Promise;
 const slug = require("slugs");
 
-const Schema = mongoose.Schema;
+var Schema = mongoose.Schema;
 
 //Movie
-var movieSchema = new Schema({
+const movieSchema = Schema({
   _id: {
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     auto: true
+  },
+  movieAPIID: {
+    type: String,
+    alias: "movieID"
   },
   title: {
     type: String,
@@ -22,6 +29,7 @@ var movieSchema = new Schema({
   tags: [String],
   synopsis: String,
   trailer: String,
+  genres: String,
   poster: String,
   backdrop: String,
   leadActors: [String],
@@ -31,14 +39,14 @@ var movieSchema = new Schema({
     musicDirector: [String]
   },
   sessions: {
-    type: mongoose.Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Session"
   },
   created: {
     type: Date,
     default: Date.now
   },
-  Update: {
+  updated: {
     type: Date,
     default: Date.now
   }
@@ -46,8 +54,7 @@ var movieSchema = new Schema({
 
 // Define  indexes
 movieSchema.index({
-  title: "text",
-  language: "text"
+  title: "text"
 });
 
 movieSchema.index({ synopsis: "text" });
@@ -59,5 +66,13 @@ function autopopulate(next) {
 movieSchema.pre("find", autopopulate);
 movieSchema.pre("findOne", autopopulate);
 
+// var __movie = movieSchema.statics
+//   .createMovieByName("Kadaikutty Singam")
+//   .then(__movie => {
+//     console.log(__movie);
+//   });
+
+console.log(`-------------in this file ${__filename}`);
 // Export the model
+//export default mongoose.model("Movie", movieSchema);
 module.exports = mongoose.model("Movie", movieSchema);

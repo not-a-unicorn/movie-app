@@ -1,7 +1,7 @@
 // import environmental variables from our variables.env file
 require("dotenv").config({ path: ".env" });
 const helper = require("./helpers");
-require("regenerator-runtime/runtime")
+require("regenerator-runtime/runtime");
 
 //Emit app mode - prod vs dev
 console.log(`***** Application mode ${helper.getAppMode()}`);
@@ -10,7 +10,9 @@ console.log(`***** Application mode ${helper.getAppMode()}`);
 // Connect to our Database and handle any bad connections
 const mongoose = require("mongoose");
 const dbURI =
-  helper.getAppMode() == "PROD" ? process.env.DB_URI_PROD : process.env.DB_URI_DEV;
+  helper.getAppMode() == "PROD"
+    ? process.env.DB_URI_PROD
+    : process.env.DB_URI_DEV;
 mongoose.connect(
   dbURI,
   { useNewUrlParser: true }

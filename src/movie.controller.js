@@ -1,168 +1,57 @@
-var { Movie } = require("./movie.model");
-var { Session } = require("./session.model");
-var { Cinema } = require("./cinema.model");
-const bodyParser = require("body-parser");
+import { isArray } from "util";
 
-var { getStatus } = require("./movie.response");
-const mongoose = require("mongoose");
-var { retrieveMovie } = require("./tmdb");
+//import { Movie } from "./movie.model";
+var Movie = require("./movie.model");
+var bodyParser = require("body-parser");
+var tmdb = require("./tmdb");
 
-//Simple version, without validation or sanitation
-exports.test = function(req, res) {
-  console.log("in Test");
-  res.send("Test Controller for the movie endpoint");
-};
+export function createMovie(req, res) {
+  let movieNames = req.body.movieNames;
+  movieNames = isArray(movieNames) ? movieNames : [movieNames]; //If one movie is passed a string turn it into an array
 
-//Lookp movie with id
-exports.movie_details = function(req, res) {
-  Movie.findById(req.params.id, function(err, movie) {
-    if (err) return next(err);
-    res.send(movie);
+  var jsonReponse = [];
+  let promises = [];
+  movieNames.forEach(movieName => {
+    promises.push(Promise.resolve(createMovieByName(movieName)));
   });
-};
 
-//Lookup all movies
-exports.movie_dedetailsAll = function(req, res) {
-  console.log("in /movie");
-  Movie.find(function(err, movies) {
-    if (err) return err;
-    res.status(200).json(movies);
-    //res.send(movie);
-  });
-};
-
-//Delete movie with id
-exports.movie_delete = function(req, res) {
-  Movie.findByIdAndRemove(req.params.id, function(err) {
-    if (err) return next(err);
-    res.send("Deleted successfully!");
-  });
-};
-
-//Update movie with id
-exports.movie_update = function(req, res) {
-  Movie.findByIdAndUpdate(req.params.id, { $set: req.body }, function(
-    err,
-    movie
-  ) {
-    if (err) return next(err);
-    res.send("Product udpated.");
-  });
-};
-
-//Create new movie
-exports.movie_create = function(req, res) {
-  console.log("in product route");
-  let movie = new Movie({
-    name: req.headers.name,
-    price: req.headers.price
-    //name: "orang",
-    // price: "20"
-  });
-  console.log("product " + movie);
-
-  movie.save(function(err) {
-    if (err) {
-      return next(err);
-    }
-    res.send("Product Created successfully");
-  });
-};
-
-//Create Movies from IMDB
-exports.movie_createbulk = function(req, res) {
-  let moviename = req.body.movies;
-  retrieveMovie("5066229b476a9c157a74692454f7661e", moviename, [
-    "videos",
-    "images",
-    "credits"
-  ])
-    .then(_movie => {
-      //Add dummy sesions
-      let sessions = [
-        new Session({
-          _sesionid: new mongoose.Types.ObjectId(),
-          state: "VIC",
-          location: "Dandenong",
-          cinema: "Event",
-          sessionDateTime: ["27/09/2018 18:00"],
-          ticketLink:
-            "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
-        }),
-        new Session({
-          _sesionid: new mongoose.Types.ObjectId(),
-          state: "NSW",
-          location: "Liverpool ",
-          cinema: "Event Cinemas",
-          sessionDateTime: [
-            "27/09/2018 18:00",
-            "27/09/2018 21:00",
-            "27/09/2018 15:00"
-          ],
-          ticketLink:
-            "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
-        }),
-        new Session({
-          _sesionid: new mongoose.Types.ObjectId(),
-          state: "ACT",
-          location: "Canberra",
-          cinema: "Event",
-          sessionDateTime: ["27/09/2018 18:00"],
-          ticketLink:
-            "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9035777&bookingSource=www|sessions"
-        })
-      ]; //New Session
-
-      //Movie
-      let movie = new Movie({
-        title: _movie.title,
-        language: _movie.languages,
-        synopsis: _movie.plot,
-        trailer: _movie.trailer,
-        poster: _movie.poster,
-        leadActors: _movie.leadActors,
-        cast: _movie.cast,
-        crew: {
-          director: _movie.crew.director,
-          musicDirector: _movie.crew.musicDirector
-        },
-        sessions: sessions
-      }); //new Movie
-      console.log(_movie.director);
-      movie.save(function(err) {
-        if (err) {
-          //return next(err);
-          console.log(`Error occured in saving movie ${movie.title} ${err}`);
-          res.send(`{Error : ${e}`);
-        }
-        res.status(200).json(`{Success : Movie  created} ${movie}`);
+  Promise.all(promises)
+    .then(movies => {
+      console.log(`Succesfully created movie/s ${movieNames.join()}`);
+      let msg = `Succesfully created movie/s ${movieNames.join()}`;
+      jsonReponse.push({ Status: msg });
+      movies.forEach(movie => {
+        jsonReponse.push(movie);
       });
-    }) //then
-    .catch(e => {
-      res.status(404).json({ Error: "Movie doesnt exist" });
-
-      console.log(e);
-    });
-};
-
-exports.searchMovie = async (req, res) => {
-  console.log("--------------In searchMovie");
-  console.log("----+ " + req.query.q);
-  const movies = await Movie.find(
-    {
-      $text: {
-        $search: req.query.q
-      }
-    },
-    {
-      score: { $meta: "textScore" }
-    }
-  )
-    // the sort them
-    .sort({
-      score: { $meta: "textScore" }
+      res.json(jsonReponse);
     })
-    // limit to only 5 results
-    .limit(5);
-  res.json(movies);
-};
+    .catch(err => {
+      console.log(
+        `Error creating movie/s  : ${movieNames.join()} Error :  ${err}`
+      );
+      res.send(`Error creating movie/ ${movieNames.join()} in database`);
+    });
+}
+
+async function createMovieByName(_movieName) {
+  //Lookup movie from the 3rd party movie data API
+  let dbMovie = await tmdb.retrieveMovie({ movieName: _movieName });
+  let modelMovie = new Movie({});
+  Object.assign(modelMovie, dbMovie);
+  await modelMovie.save();
+  return modelMovie;
+}
+
+// .then(movie => {
+//   console.log(`Succesfully created movie ${movie.title}`);
+//   //res.send(`Succesfully created movie ${movie.title} ID ${movie.id}`);
+//
+//   //jsonReponse.push(JSON.stringify({ STATUS: msg, MOVIE: movie }));
+
+//   jsonReponse.push({ MOVIE: movie });
+//   console.log("&&&&&");
+//   console.log(jsonReponse);
+//   console.log("&&&&&");
+// })
+// .catch(err => {
+// });
