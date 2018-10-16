@@ -25,13 +25,13 @@ const movieSchema = new Schema({
     required: "Must have movie title"
   },
   slug: String, //for browsing movie details directly
-  language: { type: String },
+  language: String,
   leadActors: [String],
   rating: Number,
   tags: [String],
   synopsis: String,
   trailer: String,
-  genres: String,
+  genres: [String],
   poster: String,
   backdrop: String,
   leadActors: [String],
@@ -40,10 +40,12 @@ const movieSchema = new Schema({
     director: [String],
     musicDirector: [String]
   },
-  sessions: {
-    type: Schema.Types.ObjectId,
-    ref: "Session"
-  },
+  sessions: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Session"
+    }
+  ],
   created: {
     type: Date,
     default: Date.now
@@ -54,27 +56,19 @@ const movieSchema = new Schema({
   }
 });
 
-// Define  indexes
-movieSchema.index({
-  title: "text"
-});
+// // Define  indexes
+// movieSchema.index({
+//   title: "text"
+// });
 
 // movieSchema.index({ synopsis: "text" });
 
-function autopopulate(next) {
-  this.populate("title");
-  next();
-}
-movieSchema.pre("find", autopopulate);
-movieSchema.pre("findOne", autopopulate);
+// function autopopulate(next) {
+//   this.populate("title");
+//   next();
+// }
+// movieSchema.pre("find", autopopulate);
+// movieSchema.pre("findOne", autopopulate);
 
-// var __movie = movieSchema.statics
-//   .createMovieByName("Kadaikutty Singam")
-//   .then(__movie => {
-//     console.log(__movie);
-//   });
-
-console.log(`-------------in this file ${__filename}`);
 // Export the model
-//export default mongoose.model("Movie", movieSchema);
 module.exports = mongoose.model("Movie", movieSchema);

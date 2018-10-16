@@ -13,7 +13,6 @@ let clientResponse = {
 };
 
 export async function getMovie(req, res) {
-  console.log("in getMovie");
   const _movies = await Movie.find();
 
   clientResponse.status = "successfully retrieved movies";

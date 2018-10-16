@@ -21,8 +21,8 @@ const regeneratorRuntime = require("regenerator-runtime");
 const movieController = require("./movie.controller");
 
 //Routes for CRUD functions of movie endpoint
-router.get("/testsearch", catchErrors(movieController.searchMovie));
-router.post("/testcreate", movieController.createMovie);
+router.get("/testsearch", catchErrors(movieController.getMovie));
+
 
 // router.put("/api/v1/movies/:id/update", movieController.movie_update);
 
