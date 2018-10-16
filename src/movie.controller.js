@@ -8,16 +8,61 @@ var tmdb = require("./tmdb");
 //JSON reponse object
 
 let clientResponse = {
-  status: {},
+  reponse: { status: "", message: "" },
   content: []
 };
+export async function getAllMovies(req, res) {
+  // .select("+updated"); to included an excluded field
 
-export async function getMovie(req, res) {
-  const _movies = await Movie.find();
+  const _limit = Number(req.query.limit) || 10;
+  const _skip = _limit * Number(req.query.skip) || 0;
 
-  clientResponse.status = "successfully retrieved movies";
-  clientResponse.content.push(_movies);
-  res.status(200).json(clientResponse);
+  try {
+    let movies = await Movie.find()
+      .limit(_limit)
+      .skip(_skip);
+
+    //TO DO: add some sort capability to increase relevance
+    handleResponse({
+      reponse: res,
+      status: "success",
+      content: movies
+    });
+  } catch (error) {
+    handleResponse({
+      reponse: res,
+      status: "error",
+      message: error.message
+    });
+  }
+}
+
+export async function getMoviesWithActiveSessions(req, res) {
+  // .select("+updated"); to included an excluded field
+
+  const _limit = Number(req.query.limit) || 10;
+  const _skip = _limit * Number(req.query.skip) || 0;
+
+  try {
+    //refactor to return on movies with live sessions
+    const movies = await Movie.where("sessions")
+      .ne([])
+      .limit(_limit)
+      .skip(_skip);
+
+    //TO DO: add some sort capability to increase relevance
+    handleResponse({
+      reponse: res,
+      status: "success",
+      content: movies
+    });
+  } catch (error) {
+    handleResponse({
+      reponse: res,
+      status: "error",
+      message: error.message
+    });
+  }
 }
 //Add one or more movies based on name/s passed in the request body
 export function createMovie(req, res) {
@@ -40,7 +85,7 @@ export function createMovie(req, res) {
         moviesCreated.push(movie.title);
         clientResponse.content.push(movie);
       });
-      clientResponse.status = `Succesfully created movie/s ${moviesCreated.join()}`;
+      clientResponse.reponse = `Succesfully created movie/s ${moviesCreated.join()}`;
       res.status(200).json(clientResponse);
       clientResponse.content = [];
     })
@@ -48,7 +93,7 @@ export function createMovie(req, res) {
       console.log(
         `Error creating movie/s  : ${movieNames.join()} Error :  ${err}`
       );
-      clientResponse.status = `Error creating movie/s ${movieNames.join()} in database`;
+      clientResponse.reponse = `Error creating movie/s ${movieNames.join()} in database`;
       clientResponse.content = {};
       res.status(500).json(clientResponse);
     });
@@ -62,4 +107,24 @@ async function createMovieByName(_movieName) {
 
   await modelMovie.save();
   return modelMovie;
+}
+
+function handleResponse({ reponse, status, message = "", content = [] }) {
+  //http Status
+  let httpStatus = status == "success" ? 200 : 500;
+
+  //Set override message if no message passed
+  if (!message) {
+    if (status == "success") {
+      message =
+        content.length > 0
+          ? "Successfully retrieved movies"
+          : "No movies available for the specified criteria";
+    } else if (status == "error") {
+      message = "Failure occured in retrieving movies";
+    }
+  }
+
+  const obj = { status, message, content };
+  reponse.status(httpStatus).json(obj);
 }

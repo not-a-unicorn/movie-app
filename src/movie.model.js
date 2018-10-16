@@ -9,15 +9,14 @@ var Schema = mongoose.Schema;
 
 //Movie
 const movieSchema = new Schema({
-  // _id: {
-  //   type: Schema.Types.ObjectId,
-  //   auto: true,
-  //   required: true,
-  //   index: true
-  // },
+  _id: {
+    type: mongoose.Schema.ObjectId,
+    select: false
+  },
   movieAPIID: {
     type: String,
-    alias: "movieID"
+    alias: "movieID",
+    select: false
   },
   title: {
     type: String,
@@ -43,17 +42,21 @@ const movieSchema = new Schema({
   sessions: [
     {
       type: Schema.Types.ObjectId,
+      default: null,
       ref: "Session"
     }
   ],
   created: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    select: false
   },
   updated: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+    select: false
+  },
+  __v: { type: Number, select: false }
 });
 
 // // Define  indexes

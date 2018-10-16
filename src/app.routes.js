@@ -16,21 +16,25 @@ const regeneratorRuntime = require("regenerator-runtime");
 //   //res.sendFile(path.join(__dirname+'/../public/app.html'));
 // });
 
-
 //API related routes
 const movieController = require("./movie.controller");
 
 //Routes for CRUD functions of movie endpoint
-router.get("/testsearch", catchErrors(movieController.getMovie));
-
+router.get("/testsearch", catchErrors(movieController.getMoviesWithActiveSessions));
 
 // router.put("/api/v1/movies/:id/update", movieController.movie_update);
 
 // router.get("/api/v1/movies/:id", movieController.movie_details);
-router.get(["/movies/", "/movie", "/api/v1/movies/"], movieController.getMovie); //deprecate root level API serves
 
+//get all movies. optional queries limit=2&skip=0 
+router.get(["/api/v1/movies/getAll"], movieController.getAllMovies); //deprecate root level API serves
+//get all movies with active show sessions. optional queries limit=2&skip=0
+router.get(
+  ["/movies/", "/movie", "/api/v1/movies/getSessions/"],
+  movieController.getMoviesWithActiveSessions
+); //deprecate root level API serves
 
- router.post("/api/v1/movies/create", movieController.createMovie);
+router.post("/api/v1/movies/create", movieController.createMovie);
 // router.post("/api/v1/movies/createbulk", movieController.movie_createbulk);
 
 // router.delete("/api/v1/movies/:id/delete", movieController.movie_delete);
