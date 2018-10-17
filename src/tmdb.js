@@ -93,8 +93,7 @@ function getMovieDetails(
         res
           .json()
           .then(_movieResult => {
-            console.log(_movieResult);
-            //If the movie array is empty search wasnt succesful
+                        //If the movie array is empty search wasnt succesful
             if (!_movieResult)
               reject(
                 Error(`Lookup for movie name ${movieID} didn't return results`)
