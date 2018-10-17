@@ -1,7 +1,8 @@
+require("regenerator-runtime/runtime");
+
 // import environmental variables from our variables.env file
 require("dotenv").config({ path: ".env" });
 const helper = require("./helpers");
-require("regenerator-runtime/runtime");
 
 //Emit app mode - prod vs dev
 console.log(`***** Application mode ${helper.getAppMode()}`);

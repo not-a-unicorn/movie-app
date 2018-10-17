@@ -1,0 +1,32 @@
+[
+  {
+    "_id": "",
+    "movieAPIID": "12345",
+    "title": "Titanic",
+    "slug":"_Titanic",
+    "language": "English",
+    "rating":8,
+    "synopsis": "84 years later, a 101-year-old woman named Rose DeWitt Bukater tells the story to her granddaughter Lizzy Calvert, Brock Lovett, Lewis Bodine, Bobby Buell and Anatoly Mikailavich on the Keldysh about her life set in April 10th 1912, on a ship called Titanic when young Rose boards the departing ship with the upper-class passengers and her mother, Ruth DeWitt Bukater, and her fiancé, Caledon Hockley. Meanwhile, a drifter and artist named Jack Dawson and his best friend Fabrizio De Rossi win third-class tickets to the ship in a game. And she explains the whole story from departure until the death of Titanic on its first and last voyage April 15th, 1912 at 2:20 in the morning.",
+    "trailer": "https://www.youtube.com/watch?v=CHekzSiZjrY",
+    "poster": "https://image.tmdb.org/t/p/w500/f9iH7Javzxokvnkiz2yHD1dcmUy.jpg",
+    "crew": {
+      "director": ["Joe Russo", "Anthony Russo"],
+      "musicDirector": ["Alan Silvestri"]
+    },
+    "leadActors": ["Robert Downey Jr.", "Chris Hemsworth", "Mark Ruffalo"],
+    "tags": ["Holloywood", "Period", "Real Storay"],
+    "genres": ["Adventure", "Science Fiction", "Action", "Fantasy"],
+    "cast": [
+      "Robert Downey Jr.",
+      "Chris Hemsworth",
+      "Mark Ruffalo",
+      "Chris Evans",
+      "Scarlett Johansson",
+      "Don Cheadle"
+    ],
+
+    "sessions": ["58c03ac18060196ca0b51d51"],
+    "created": "2017-01-08T17:09:21.627Z",
+    "Updated": "2017-04-08T17:09:21.627Z"
+  }
+]

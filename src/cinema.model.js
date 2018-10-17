@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 //Cinemas
 let cinemaSchema = new Schema({
-  _id: { type: Schema.ObjectId, auto: true },
+  _id: { type: Schema.ObjectId, auto: true},
   name: {
     type: String,
     trim: true,
@@ -26,7 +26,7 @@ let cinemaSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  Update: {
+  Updated: {
     type: Date,
     default: Date.now
   }

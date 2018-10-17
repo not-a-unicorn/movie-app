@@ -9,10 +9,6 @@ var Schema = mongoose.Schema;
 
 //Movie
 const movieSchema = new Schema({
-  _id: {
-    type: mongoose.Schema.ObjectId,
-    select: false
-  },
   movieAPIID: {
     type: String,
     alias: "movieID",
