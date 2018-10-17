@@ -6,7 +6,8 @@ const bodyParser = require("body-parser");
 require("dotenv").config(); //  load environmental configs for in Dev
 
 //import appwide routes
-import routes from "./app.routes";
+import appRoutes from "./app.routes";
+import testRoutes from "./testData.routes";
 
 //Web Server
 app.use(morgan("dev")); //HTTP request logger
@@ -35,7 +36,9 @@ app.use((req, res, next) => {
 // app.use(express.static(path.join(__dirname, 'public')));
 
 //Assign Route definitions to the request
-app.use("/", routes);
+
+app.use("/test", testRoutes);
+app.use("/", appRoutes);
 
 //Error handling
 //404 - Not found

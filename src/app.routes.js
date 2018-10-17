@@ -18,15 +18,14 @@ const regeneratorRuntime = require("regenerator-runtime");
 
 //API related routes
 const movieController = require("./movie.controller");
+const testDataController = require("./testData.controller");
 
 //Routes for CRUD functions of movie endpoint
-router.get("/testsearch", catchErrors(movieController.getMoviesWithActiveSessions));
-
 // router.put("/api/v1/movies/:id/update", movieController.movie_update);
 
 // router.get("/api/v1/movies/:id", movieController.movie_details);
 
-//get all movies. optional queries limit=2&skip=0 
+//get all movies. optional queries limit=2&skip=0
 router.get(["/api/v1/movies/getAll"], movieController.getAllMovies); //deprecate root level API serves
 //get all movies with active show sessions. optional queries limit=2&skip=0
 router.get(
