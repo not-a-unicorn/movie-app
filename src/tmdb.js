@@ -2,6 +2,7 @@
 //11Oct 2018
 //Retrives movies from TMDB
 require("isomorphic-fetch");
+var ISOLanguages = require("iso-639-3");
 
 //Helper method
 function stripTrailingCommas(_string) {
@@ -92,9 +93,9 @@ function getMovieDetails(
       .then(res => {
         res
           .json()
-          .then(_movieResult => {
-                        //If the movie array is empty search wasnt succesful
-            if (!_movieResult)
+          .then(movieResults => {
+            //If the movie array is empty search wasnt succesful
+            if (!movieResults)
               reject(
                 Error(`Lookup for movie name ${movieID} didn't return results`)
               );
@@ -112,7 +113,7 @@ function getMovieDetails(
               rating,
               credits: { cast: castObjList },
               credits: { crew: crewObjList }
-            } = _movieResult;
+            } = movieResults;
 
             //Extract the first poster meeting the width criterion
             let posterURL = null;
@@ -167,11 +168,16 @@ function getMovieDetails(
               }
             });
 
+
             //compose a partial movice object
             var movie = {
               movieID,
               title,
-              language,
+                ///convert iso_639_1 code into full form language description
+              language: ISOLanguages.find(
+                _language =>
+                  _language.iso6391 == movieResults.spoken_languages[0].iso_639_1
+              ).name,
               synopsis,
               rating,
               trailer: "",
