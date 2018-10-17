@@ -45,20 +45,30 @@ export async function getMoviesWithActiveSessions(req, res) {
   const _limit = Number(req.query.limit) || 10;
   const _skip = _limit * Number(req.query.skip) || 0;
 
+  var movieSessions = [];
   try {
     //refactor to return on movies with live sessions
+    let movies = await Movie.find()
+      .limit(_limit)
+      .skip(_skip);
 
-    const movies = await Movie.where("sessions")
-      .ne([])
-      .populate({ path: "sessions", populate: { path: "cinema" } });
+    //async for (const movie of movies){}
 
-      //TO DO: add some sort capability to increase relevance
-    handleResponse({
+    for (const movie of movies) {
+      const sessions = await Session.find({ movie: movie._id }).populate("cinema");
+
+      var {title,language,rating,tags,genres,poster,trailer,duration, synopsis,crew,leadActors,cast,slug} = movie;
+      const movieSession = {title,language,rating,duration,sessions,tags,genres,poster,trailer,synopsis,crew,leadActors,cast,slug};
+       movieSessions.push(movieSession);
+    }
+
+     handleResponse({
       reponse: res,
       status: "success",
-      content: movies
+      content: movieSessions
     });
   } catch (error) {
+    console.log("error");
     handleResponse({
       reponse: res,
       status: "error",
@@ -66,6 +76,7 @@ export async function getMoviesWithActiveSessions(req, res) {
     });
   }
 }
+
 //Add one or more movies based on name/s passed in the request body
 export function createMovie(req, res) {
   let movieNames = req.body.movieNames;
@@ -112,6 +123,7 @@ async function createMovieByName(_movieName) {
 }
 
 function handleResponse({ reponse, status, message = "", content = [] }) {
+  console.log(content);
   //http Status
   let httpStatus = status == "success" ? 200 : 500;
 
@@ -126,7 +138,6 @@ function handleResponse({ reponse, status, message = "", content = [] }) {
       message = "Failure occured in retrieving movies";
     }
   }
-
   const obj = { status, message, content };
   reponse.status(httpStatus).json(obj);
 }

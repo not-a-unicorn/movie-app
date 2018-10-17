@@ -23,6 +23,7 @@ const movieSchema = new Schema({
   language: String,
   leadActors: [String],
   rating: Number,
+  duration: Number,
   tags: [String],
   synopsis: String,
   trailer: String,
@@ -35,13 +36,6 @@ const movieSchema = new Schema({
     director: [String],
     musicDirector: [String]
   },
-  sessions: [
-    {
-      type: Schema.Types.ObjectId,
-      default: null,
-      ref: "Session"
-    }
-  ],
   created: {
     type: Date,
     default: Date.now,

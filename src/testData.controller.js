@@ -66,6 +66,10 @@ export async function createTestData(req, res) {
       fs.readFileSync(sampleDataDir + "_cinemas.json", "utf-8")
     );
 
+    await Movie.insertMany(movies);
+    await Session.insertMany(sessions);
+    await Cinema.insertMany(cinemas);
+
     handleResponse({
       reponse: res,
       status: "success",
@@ -81,11 +85,7 @@ export async function createTestData(req, res) {
     });
   }
 
-  await Movie.insertMany(movies);
-  await Session.insertMany(sessions);
-  await Cinema.insertMany(cinemas);
-
-  res.status(200).json({ message: "Sample Data Loaded " });
+  //res.status(200).json({ message: "Sample Data Loaded " });
 }
 
 function handleResponse({ reponse, status, message = "", content = [] }) {

@@ -55,7 +55,8 @@
   },
   "babel": {
     "presets": [
-      "env", "es2015"
+      "env",
+      "es2015"
     ]
   },
   "repository": {
