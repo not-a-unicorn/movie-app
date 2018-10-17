@@ -55,14 +55,45 @@ export async function getMoviesWithActiveSessions(req, res) {
     //async for (const movie of movies){}
 
     for (const movie of movies) {
-      const sessions = await Session.find({ movie: movie._id }).populate("cinema");
+      const sessions = await Session.find({ movie: movie._id }).populate(
+        "cinema"
+      );
 
-      var {title,language,rating,tags,genres,poster,trailer,duration, synopsis,crew,leadActors,cast,slug} = movie;
-      const movieSession = {title,language,rating,duration,sessions,tags,genres,poster,trailer,synopsis,crew,leadActors,cast,slug};
-       movieSessions.push(movieSession);
+      var {
+        title,
+        language,
+        rating,
+        tags,
+        genres,
+        poster,
+        trailer,
+        duration,
+        synopsis,
+        crew,
+        leadActors,
+        cast,
+        slug
+      } = movie;
+      const movieSession = {
+        title,
+        language,
+        rating,
+        duration,
+        sessions,
+        tags,
+        genres,
+        poster,
+        trailer,
+        synopsis,
+        crew,
+        leadActors,
+        cast,
+        slug
+      };
+      movieSessions.push(movieSession);
     }
 
-     handleResponse({
+    handleResponse({
       reponse: res,
       status: "success",
       content: movieSessions
@@ -138,6 +169,7 @@ function handleResponse({ reponse, status, message = "", content = [] }) {
       message = "Failure occured in retrieving movies";
     }
   }
-  const obj = { status, message, content };
+  const _status = { status, message };
+  const obj = { status: _status, content };
   reponse.status(httpStatus).json(obj);
 }
