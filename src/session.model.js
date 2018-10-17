@@ -19,12 +19,15 @@ let sessionSchema = new Schema({
   },
   created: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    select: false
   },
   Update: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+    select: false
+  },
+  __v: { type: Number, select: false }
 });
 
 // Export the model

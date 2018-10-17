@@ -2,6 +2,12 @@
   {
     "_id": "58c03ac18060196ca0b51d51",
     "cinema": "58c03ac18060197ca0b52d51",
+    "sessionDateTime": [
+      "2017-03-08T17:09:21.627Z",
+      "2017-03-08T17:10:21.627Z",
+      "2018-03-08T17:09:21.627Z"
+    ],
+
     "ticketLink": "https://www.eventcinemas.com.au/Orders/Tickets#sessionId=9032724",
     "created": "2017-03-08T17:09:21.627Z",
     "Updated": "2017-03-08T17:09:21.627Z"

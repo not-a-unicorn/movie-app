@@ -43,7 +43,6 @@ exports.stripTrailingCommas = function(_string) {
 
 exports.getAppMode = () => {
   const appMode = process.env.NODE_ENV.toLowerCase();
-  console.log(appMode);
   switch (true) {
     case !appMode:
       console.log(

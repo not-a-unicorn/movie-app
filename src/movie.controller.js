@@ -2,6 +2,8 @@ import { isArray } from "util";
 
 //import { Movie } from "./movie.model";
 var Movie = require("./movie.model");
+var Session = require("./session.model");
+var Cinema = require("./cinema.model");
 var bodyParser = require("body-parser");
 var tmdb = require("./tmdb");
 
@@ -45,12 +47,12 @@ export async function getMoviesWithActiveSessions(req, res) {
 
   try {
     //refactor to return on movies with live sessions
+
     const movies = await Movie.where("sessions")
       .ne([])
-      .limit(_limit)
-      .skip(_skip);
+      .populate({ path: "sessions", populate: { path: "cinema" } });
 
-    //TO DO: add some sort capability to increase relevance
+      //TO DO: add some sort capability to increase relevance
     handleResponse({
       reponse: res,
       status: "success",

@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 //Cinemas
 let cinemaSchema = new Schema({
-  _id: { type: Schema.ObjectId, auto: true},
+  _id: { type: Schema.ObjectId, auto: true },
   name: {
     type: String,
     trim: true,
@@ -24,12 +24,15 @@ let cinemaSchema = new Schema({
 
   created: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    select: false
   },
   Updated: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+    select: false
+  },
+  __v: { type: Number, select: false }
 });
 
 // Export the model
