@@ -38,7 +38,6 @@ var Cinema = require("./cinema.model");
 var sampleDataDir = path.join(__dirname, "./../data/");
 console.log(path.join(sampleDataDir, "_sessions.json"));
 
-
 var movies = JSON.parse(
   fs.readFileSync(sampleDataDir + "_movies.json", "utf-8")
 );
@@ -49,18 +48,18 @@ var cinemas = JSON.parse(
   fs.readFileSync(sampleDataDir + "_cinemas.json", "utf-8")
 );
 
-function deleteData() {
+async function deleteData() {
   console.log("😢😢 Goodbye Data...");
   try {
-    console.log("about to try remove");
-        Movie.remove(function(err, removed) {
+    console.log("about to try remove gain ");
+    await Movie.remove(function(err, removed) {
       if (err) {
         console.log(err);
       } else {
         console.log(removed);
       }
     });
-
+    await Movie.remove();
     Cinema.remove();
     Session.remove();
     console.log(
@@ -93,7 +92,7 @@ if (process.argv.includes("--delete")) {
   console.log("delete shit");
   deleteData();
 } else {
-    console.log('save shit');
+  console.log("save shit");
   deleteData();
   loadData();
 }
