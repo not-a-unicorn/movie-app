@@ -30,10 +30,10 @@ app.use((req, res, next) => {
   next();
 });
 
-//Static files -- NEED TO DEBUG
-// const staticFiles = path.join(__dirname, "../../public");
-// console.log(`Static files : ${staticFiles}`);
-// app.use(express.static(path.join(__dirname, 'public')));
+
+// http://www.tutorialsteacher.com/nodejs/serving-static-files-in-nodejs   ?
+//Static files
+app.use(express.static(path.join(__dirname, "public")));
 
 //Assign Route definitions to the request
 app.use("/", appRoutes);
