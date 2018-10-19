@@ -52,7 +52,7 @@ export async function getMoviesWithActiveSessions(req, res) {
         "cinema"
       );
 
-      movieSessions.push(...movieSession);
+      movieSessions.push(...sessions);
     }
 
     handleResponse({
