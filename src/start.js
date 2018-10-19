@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 // import environmental variables from our variables.env file
 require("dotenv").config({ path: ".env" });
 const helper = require("./helpers/helpers");
+=======
+require("regenerator-runtime/runtime");
+
+// import environmental variables from our variables.env file
+require("dotenv").config({ path: ".env" });
+const helper = require("./helpers");
+>>>>>>> origin/serverside
 
 //Emit app mode - prod vs dev
 console.log(`***** Application mode ${helper.getAppMode()}`);
@@ -23,6 +31,11 @@ mongoose.connection.on("error", err => {
   console.error(`🙅 🚫 🙅 🚫 🙅 🚫 🙅 🚫 → ${err.message}`);
 });
 
+<<<<<<< HEAD
+=======
+// import all of our models
+require("./movie.model");
+>>>>>>> origin/serverside
 
 // Start our app!
 const app = require("./app");
