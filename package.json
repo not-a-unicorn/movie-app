@@ -11,7 +11,9 @@
     "locallaunch": "start chrome public/app.html",
     "test": "mocha -- app/**/test/*.js --recursive ||true",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha  --recursive",
-    "coverage-report": "start chrome coverage/lcov-report/index.html"
+    "coverage-report": "start chrome coverage/lcov-report/index.html",
+    "load-sample-data" :"https://ozindianmovies.herokuapp.com/test/create",
+    "postdeploy":"npm run load-sample-data"
   },
   "keywords": [
     "movie-listing",
