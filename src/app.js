@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 
 // http://www.tutorialsteacher.com/nodejs/serving-static-files-in-nodejs   ?
 //Static files
-app.use("/public", express.static("public"));
+app.use("/assets", express.static("public"));
 
 //Assign Route definitions to the request
 app.use("/", appRoutes);

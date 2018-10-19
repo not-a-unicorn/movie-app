@@ -4,10 +4,9 @@ import { isArray } from "util";
 var Movie = require("../models/movie.model");
 var Session = require("../models/session.model");
 var Cinema = require("../models/cinema.model");
-var bodyParser = require("body-parser");
 var tmdb = require("../vendor/tmdb");
 
-//Returns all movies irrespective of active sessions
+//Returns all movies irrespective without session(show) info
 export async function getAllMovies(req, res) {
   // .select("+updated"); to included an excluded field
 
@@ -34,25 +33,54 @@ export async function getAllMovies(req, res) {
   }
 }
 
+//Return movie by the slug
+export async function getMoviebySlug(req, res, next) {
+  const movie = await Movie.findOne({ slug: req.params.slug });
+
+  if (!movie) return next();
+
+  handleResponse({
+    reponse: res,
+    status: "success",
+    message: `Succesfully retrieve  movie ${movie.title}`,
+    content: [movie]
+  });
+}
+
+//Return movie by ID
+export async function getMoviebyID(req, res, next) {
+  const movie = await Movie.findOne({ _id: req.params.id });
+
+  if (!movie) return next();
+
+  handleResponse({
+    reponse: res,
+    status: "success",
+    message: `Succesfully retrieve  movie ${movie.title}`,
+    content: [movie]
+  });
+}
+
 // TODO: determine how to determine whats and active session
 //Returns all movies with only active sessions
 export async function getMoviesWithActiveSessions(req, res) {
-  const _limit = Number(req.query.limit) || 10;
-  const _skip = _limit * Number(req.query.skip) || 0;
+  const limit = Number(req.query.limit) || 100;
+  const skip = limit * Number(req.query.skip) || 0;
 
   var movieSessions = [];
   try {
-    //refactor to return on movies with live sessions
     let movies = await Movie.find()
-      .limit(_limit)
-      .skip(_skip);
+      .limit(limit)
+      .skip(skip);
 
     for (const movie of movies) {
       const sessions = await Session.find({ movie: movie._id }).populate(
         "cinema"
       );
-
-      movieSessions.push(...sessions);
+      // TODO : do this "document join" in mongodbitself to reduce IO + Network
+      //construct movie and sessions into a single obect
+      const movieSession = { ...movie._doc, sessions };
+      movieSessions.push(movieSession);
     }
 
     handleResponse({
@@ -116,8 +144,10 @@ export async function createMovieByName(req, res) {
   }
 }
 
+//Helpder Method
+//TODO: Refactor by extracting into @helper.js
+// ? can this be done by enabling the callee function to send the the reponse
 function handleResponse({ reponse, status, message = "", content = [] }) {
-  console.log(content);
   //http Status
   let httpStatus = status == "success" ? 200 : 500;
 

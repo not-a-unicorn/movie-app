@@ -16,27 +16,26 @@ import path from "path";
 // });
 
 //API related routes
-import {
-  getAllMovies,
-  getMoviesWithActiveSessions,
-  createMovieByName
-} from "../controllers/movie.controller";
+const movieController = require("../controllers/movie.controller");
 
 //Routes for CRUD functions of movie endpoint
 // router.put("/api/v1/movies/:id/update", movieController.movie_update);
 
-// router.get("/api/v1/movies/:id", movieController.movie_details);
+router.get("/api/v1/movies/:id", catchErrors(movieController.getMoviebyID));
+router.get("/api/v1/movies/:slug", catchErrors(movieController.getMoviebySlug));
 
 //get all movies. optional queries limit=2&skip=0
-router.get(["/api/v1/movies/getAll"], catchErrors(getAllMovies)); //deprecate root level API serves
+router.get(
+  ["/api/v1/movies/getAll"],
+  catchErrors(movieController.getAllMovies)
+); //deprecate root level API serves
 //get all movies with active show sessions. optional queries limit=2&skip=0
 router.get(
   ["/movies/", "/movie", "/api/v1/movies/getSessions/"],
-  catchErrors(getMoviesWithActiveSessions)
+  catchErrors(movieController.getMoviesWithActiveSessions)
 ); //deprecate root level API serves
 
-router.post("/api/v1/movies/create", createMovieByName);
-// router.post("/api/v1/movies/createbulk", movieController.movie_createbulk);
+router.post("/api/v1/movies/create", movieController.createMovieByName);
 
 // router.delete("/api/v1/movies/:id/delete", movieController.movie_delete);
 

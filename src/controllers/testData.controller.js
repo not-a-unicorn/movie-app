@@ -89,6 +89,7 @@ export async function createTestData(req, res) {
   //res.status(200).json({ message: "Sample Data Loaded " });
 }
 
+//TODO refactor this helper method after movie controller
 function handleResponse({ reponse, status, message = "", content = [] }) {
   //http Status
   let httpStatus = status == "success" ? 200 : 500;
