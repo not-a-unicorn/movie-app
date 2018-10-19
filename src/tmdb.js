@@ -114,6 +114,7 @@ function getMovieDetails(
               credits: { cast: castObjList },
               credits: { crew: crewObjList }
             } = movieResults;
+            console.log(movieResults);
 
             //Extract the first poster meeting the width criterion
             let posterURL = null;
@@ -181,6 +182,8 @@ function getMovieDetails(
               synopsis,
               rating,
               trailer: "",
+              rating : 5,
+              duration : 210,
               poster: posterURL,
               genres: genresArray,
               cast: castArray,

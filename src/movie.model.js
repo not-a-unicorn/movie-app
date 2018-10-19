@@ -9,6 +9,7 @@ var Schema = mongoose.Schema;
 
 //Movie
 const movieSchema = new Schema({
+  _id: { type: Schema.ObjectId, auto: true, select: true },
   movieAPIID: {
     type: String,
     alias: "movieID",

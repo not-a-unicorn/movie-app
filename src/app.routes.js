@@ -33,7 +33,7 @@ router.get(
   movieController.getMoviesWithActiveSessions
 ); //deprecate root level API serves
 
-router.post("/api/v1/movies/create", movieController.createMovie);
+router.post("/api/v1/movies/create", movieController.createMovieByName);
 // router.post("/api/v1/movies/createbulk", movieController.movie_createbulk);
 
 // router.delete("/api/v1/movies/:id/delete", movieController.movie_delete);
