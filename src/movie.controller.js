@@ -7,12 +7,7 @@ var Cinema = require("./cinema.model");
 var bodyParser = require("body-parser");
 var tmdb = require("./tmdb");
 
-//JSON reponse object
-
-let clientResponse = {
-  reponse: { status: "", message: "" },
-  content: []
-};
+//Returns all movies irrespective of active sessions
 export async function getAllMovies(req, res) {
   // .select("+updated"); to included an excluded field
 
@@ -39,6 +34,8 @@ export async function getAllMovies(req, res) {
   }
 }
 
+// TODO: determine how to determine whats and active session
+//Returns all movies with only active sessions
 export async function getMoviesWithActiveSessions(req, res) {
   // .select("+updated"); to included an excluded field
 
@@ -60,6 +57,7 @@ export async function getMoviesWithActiveSessions(req, res) {
       );
 
       var {
+        _id,
         title,
         language,
         rating,
@@ -75,6 +73,7 @@ export async function getMoviesWithActiveSessions(req, res) {
         slug
       } = movie;
       const movieSession = {
+        _id,
         title,
         language,
         rating,
@@ -109,48 +108,47 @@ export async function getMoviesWithActiveSessions(req, res) {
 }
 
 //Add one or more movies based on name/s passed in the request body
-export function createMovie(req, res) {
+export function createMovieByName(req, res) {
   let movieNames = req.body.movieNames;
   //If one movie is passed a string turn it into an array
   movieNames = isArray(movieNames) ? movieNames : [movieNames];
 
-  var jsonReponse = [];
   let promises = [];
   movieNames.forEach(movieName => {
-    promises.push(Promise.resolve(createMovieByName(movieName)));
+    promises.push(
+      Promise.resolve(async () => {
+        let dbMovie = await tmdb.retrieveMovie({ movieName: movieName });
+        let modelMovie = new Movie({});
+        Object.assign(modelMovie, dbMovie);
+
+        await modelMovie.save();
+        return modelMovie;
+      })
+    );
   });
 
   Promise.all(promises)
     .then(movies => {
       console.log(`Succesfully created movie/s ${movieNames.join()}`);
 
-      let moviesCreated = [];
-      movies.forEach(movie => {
-        moviesCreated.push(movie.title);
-        clientResponse.content.push(movie);
+      console.log(movies[0].title);
+      handleResponse({
+        reponse: res,
+        status: "success",
+        message: `Succesfully created movie/s ${movieNames.join()}`,
+        contentx: movies
       });
-      clientResponse.reponse = `Succesfully created movie/s ${moviesCreated.join()}`;
-      res.status(200).json(clientResponse);
-      clientResponse.content = [];
     })
     .catch(err => {
       console.log(
         `Error creating movie/s  : ${movieNames.join()} Error :  ${err}`
       );
-      clientResponse.reponse = `Error creating movie/s ${movieNames.join()} in database`;
-      clientResponse.content = {};
-      res.status(500).json(clientResponse);
+      handleResponse({
+        reponse: res,
+        status: "error",
+        message: `Error creating movie/s ${movieNames.join()} in database`
+      });
     });
-}
-
-async function createMovieByName(_movieName) {
-  //Lookup movie from the 3rd party movie data API
-  let dbMovie = await tmdb.retrieveMovie({ movieName: _movieName });
-  let modelMovie = new Movie({});
-  Object.assign(modelMovie, dbMovie);
-
-  await modelMovie.save();
-  return modelMovie;
 }
 
 function handleResponse({ reponse, status, message = "", content = [] }) {
