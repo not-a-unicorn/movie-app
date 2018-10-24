@@ -64,44 +64,55 @@ export async function getMoviebyID(req, res, next) {
 // TODO: determine how to determine whats and active session
 //Returns all movies with only active sessions
 export async function getMoviesWithActiveSessions(req, res) {
+  /*Extract search criteria as query strings.
+    Multiple values for a given criterion are passed comma delimited
+  */
   const {
-    limit = 100,
+    limit = 30,
     skip = 0,
     states: cinemaStates = "",
-    languages: movieLanguages = ""
+    languages: movieLanguages = "",
+    //! NEW date
+    //TODO implement as part of  session filter
+    after: sessionsAfter = Date.now()
   } = req.query;
 
-  var movieSessions = [];
+  const movieSessions = [];
   try {
     // let movies = await Movie.find({ language:  { $exists: true, $in: movieLanguages}})
     let movies = await Movie.find({
-      language: { $in: movieLanguages.split(",") }
+      language: { $in: movieLanguages.split(",").trim() } // TODO: bug fix - mispelt languages exlcudes even the valid languages
     })
+      .sort(-created) //! NEW sort
       .limit(Number(limit))
       .skip(skip * limit);
 
+    //retrieve sessions associated with @movies
     for (const movie of movies) {
       let sessions = await Session.find({ movie: movie._id }).populate(
         "cinema"
       );
 
-      let filteredSessions = sessions.filter((session, sessionIndex) => {
-        //no need to filter if the client didnt pass state specifier
+      // Filter out only sessions based on @cinema.state
+      let filteredSessions = sessions.filter(session => {
+        //dont filter by state if the client didnt pass the criterion
         if (cinemaStates.trim().length === 0) return true;
+
+        //compare @session.cinema.state against every cinemaStates array item
         return (
-          cinemaStates.split(",").filter((state, stateIndex) => {
-            const match = state === session.cinema.state;
-            return match;
-          }).length > 0
+          cinemaStates
+            .split(",")
+            .trim()
+            .filter(state => {
+              const match = state === session.cinema.state;
+              return match;
+            }).length > 0
         );
       });
 
-      //only add a movie + session combination if there is at least one active session available
-      if (filteredSessions.length > 0) {
-        //construct movie and sessions into a single object
-        const movieSession = { ...movie._doc, sessions: filteredSessions };
-        movieSessions.push(movieSession);
-      }
+      //add @movie into @movieSessions if there was sessions matching the search criteria
+      if (filteredSessions.length > 0)
+        movieSessions.push({ ...movie._doc, sessions: filteredSessions });
     }
 
     handleResponse({
@@ -123,7 +134,7 @@ export async function getMoviesWithActiveSessions(req, res) {
   }
 }
 
-// TODO: determine how to determine whats and active session
+// TODO: Reimplement after stack overflow question is answers
 // ? implement filter using querymen https://stackoverflow.com/questions/35542805/perform-a-mongoose-query-in-querystring
 //Returns all movies with only active sessions
 export async function getMoviesByQuery(req, res) {
@@ -241,6 +252,6 @@ function handleResponse({ reponse, status, message = "", content = [] }) {
   let httpStatus = status == "success" ? 200 : 500;
 
   const _status = { status, message };
-  const obj = { status: _status, content };
+  const obj = JSON.stringify({ status: _status, content }, "\t"); //prettify json
   reponse.status(httpStatus).json(obj);
 }
