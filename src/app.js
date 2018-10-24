@@ -1,13 +1,13 @@
-
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-require("dotenv").config(); //  load environmental configs for in Dev
+const helper = require("./helpers/helpers");
+require("dotenv").config();
 
 //import appwide routes
-import appRoutes from "./app.routes";
-import testRoutes from "./testData.routes";
+import appRoutes from "./routes/app.routes";
+import testRoutes from "/routes/testData.routes";
 
 //Web Server
 app.use(morgan("dev")); //HTTP request logger
@@ -30,15 +30,17 @@ app.use((req, res, next) => {
   next();
 });
 
-//Static files -- NEED TO DEBUG
-// const staticFiles = path.join(__dirname, "../../public");
-// console.log(`Static files : ${staticFiles}`);
-// app.use(express.static(path.join(__dirname, 'public')));
+// http://www.tutorialsteacher.com/nodejs/serving-static-files-in-nodejs   ?
+//Static files
+//app.use("/assets", express.static("public"));
 
 //Assign Route definitions to the request
+app.use("/api", appRoutes);
 
-app.use("/test", testRoutes);
-app.use("/", appRoutes);
+if (helper.isDevelopmentMode()) {
+  app.use("/test", testRoutes); //enable facility load test data if the NODE_ENV is development
+  require("dotenv").config(); //  load environmental configs if the NODE_ENV is development
+}
 
 //Error handling
 //404 - Not found
@@ -58,5 +60,6 @@ app.use((err, req, res, next) => {
   });
 });
 
+
+
 module.exports = app;
-  

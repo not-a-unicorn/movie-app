@@ -1,9 +1,9 @@
 //import { Movie } from "./movie.model";
-var Movie = require("./movie.model");
-var Session = require("./session.model");
-var Cinema = require("./cinema.model");
+var Movie = require("../models/movie.model");
+var Session = require("../models/session.model");
+var Cinema = require("../models/cinema.model");
 var bodyParser = require("body-parser");
-const helper = require("./helpers");
+const helper = require("../helpers/helpers");
 
 //Check if app is running on DEV
 
@@ -24,9 +24,9 @@ export async function isDevEnvironment(req, res, next) {
 
 export async function deleteTestData(req, res) {
   try {
-    await Movie.remove();
-    await Session.remove();
-    await Cinema.remove();
+    await Movie.deleteMany();
+    await Session.deleteMany();
+    await Cinema.deleteMany();
     handleResponse({
       reponse: res,
       status: "success",
@@ -48,12 +48,13 @@ export async function createTestData(req, res) {
   try {
     //Delete old test data to avoid conflicts
 
-    await Movie.remove();
-    await Session.remove();
-    await Cinema.remove();
+    await Movie.deleteMany();
+    await Session.deleteMany();
+    await Cinema.deleteMany();
 
     //Load new test data
     var sampleDataDir = path.join(__dirname, "./../data/");
+    console.log(sampleDataDir);
     console.log(path.join(sampleDataDir, "_sessions.json"));
 
     var movies = JSON.parse(
@@ -88,6 +89,7 @@ export async function createTestData(req, res) {
   //res.status(200).json({ message: "Sample Data Loaded " });
 }
 
+//TODO refactor this helper method after movie controller
 function handleResponse({ reponse, status, message = "", content = [] }) {
   //http Status
   let httpStatus = status == "success" ? 200 : 500;

@@ -1,7 +1,7 @@
 require("regenerator-runtime/runtime");
 
 const mongoose = require("mongoose");
-const tmdb = require("./tmdb");
+const tmdb = require("../vendor/tmdb");
 mongoose.Promise = global.Promise;
 const slug = require("slugs");
 
@@ -9,7 +9,6 @@ var Schema = mongoose.Schema;
 
 //Movie
 const movieSchema = new Schema({
-  _id: { type: Schema.ObjectId, auto: true, select: true },
   movieAPIID: {
     type: String,
     alias: "movieID",

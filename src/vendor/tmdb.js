@@ -1,29 +1,55 @@
 //@Theepan Thevathasan
 //11Oct 2018
-//Retrives movies from TMDB
-require("isomorphic-fetch");
-var ISOLanguages = require("iso-639-3");
+//Retrives movies from themoviedb.org
+var fetch = require("node-fetch");
+import ISOLanguages from "iso-639-3";
 
-//Helper method
-function stripTrailingCommas(_string) {
-  return _string.replace(/,\s*$/, "");
-}
-
-//API Access Key for themoviedb.org
-let movieAPIKey = "5066229b476a9c157a74692454f7661e";
-
-//Consturcts the URL to fetch MovieID from themoviedb.org
-function getMovieIDURL(_apiKey, _movieName) {
+//Helper methods
+// HELPER - Consturcts the URL to fetch MovieID in @getMovieID
+function getMovieIDURL(apiKey, _movieName) {
   let searchURL = `https://api.themoviedb.org/3/search/movie?api_key=[API_KEY]&query=[MOVIE_NAME]&page=1&include_adult=true`;
   searchURL = searchURL
     .split("[API_KEY]")
-    .join(_apiKey)
+    .join(apiKey)
     .split("[MOVIE_NAME]")
     .join(_movieName);
   return searchURL;
 }
+
+//HELPER - Consturcts the URL to fetch Movie Details in @getMovieDetails
+function getMoviesDetailsURL(_apiKey, _movieID, _movieProperties = []) {
+  let movieDetailsURL = `https://api.themoviedb.org/3/movie/[MOVIE_ID]?api_key=[API_KEY]&append_to_response=[MOVIE_PROPERTIES]`; //videos,images OR videos OR images
+  movieDetailsURL = movieDetailsURL
+    .split("[API_KEY]")
+    .join(_apiKey)
+    .split("[MOVIE_ID]")
+    .join(_movieID);
+
+  //Compose append_to_response from  MovieProperties array
+  if (_movieProperties.length > 0) {
+    movieDetailsURL = movieDetailsURL
+      .split("[MOVIE_PROPERTIES]")
+      .join(_movieProperties.join(","));
+  }
+  return movieDetailsURL;
+}
+
+//HELPER - Construct movie poster URL for use in @getMovieDetails
+function getMoviePosterURL(_posterFile, _width) {
+  if (!_width) throw Error(`Poster width must be specified : ${_width}`);
+  if (!_posterFile)
+    throw Error(`Poster file name must be specified : ${_posterFile}`);
+
+  let posterURL = `https://image.tmdb.org/t/p/w[IMAGE_WIDTH]/[IMAGE_FILE_NAME]`;
+  return posterURL
+    .split("[IMAGE_WIDTH]")
+    .join(_width)
+    .split("[IMAGE_FILE_NAME]")
+    .join(_posterFile);
+}
+
 //get movieID from themoviedb.org
-//Used to get all other movie details
+//Used to get all other movie using @getMovieDetails
 function getMovieID(_apiKey, _movieName) {
   //Construct movie lookup URL
   if (!_apiKey) throw Error(`Valid APIKey must be passed : ${_apiKey}`);
@@ -55,30 +81,8 @@ function getMovieID(_apiKey, _movieName) {
   });
 }
 
-//Consturcts the URL to fetch Movie Details
-function getMoviesDetailsURL(_apiKey, _movieID, _movieProperties = []) {
-  let movieDetailsURL = `https://api.themoviedb.org/3/movie/[MOVIE_ID]?api_key=[API_KEY]&append_to_response=[MOVIE_PROPERTIES]`; //videos,images OR videos OR images
-  movieDetailsURL = movieDetailsURL
-    .split("[API_KEY]")
-    .join(_apiKey)
-    .split("[MOVIE_ID]")
-    .join(_movieID);
-
-  //Compose append_to_response from  MovieProperties array
-  if (_movieProperties.length > 0) {
-    movieDetailsURL = movieDetailsURL
-      .split("[MOVIE_PROPERTIES]")
-      .join(_movieProperties.join(","));
-  }
-  return movieDetailsURL;
-}
-
 //get all details of the movie using getMovieID()
-function getMovieDetails(
-  _apiKey = movieAPIKey,
-  _movieID,
-  _movieProperties = []
-) {
+function getMovieDetails(_apiKey, _movieID, _movieProperties = []) {
   if (!_apiKey) throw Error(`Valid APIKey must be passed : ${_apiKey}`);
   if (!_movieID) throw Error(`A valid movieID must be passed : ${_movieID}`);
 
@@ -114,7 +118,6 @@ function getMovieDetails(
               credits: { cast: castObjList },
               credits: { crew: crewObjList }
             } = movieResults;
-            console.log(movieResults);
 
             //Extract the first poster meeting the width criterion
             let posterURL = null;
@@ -169,21 +172,19 @@ function getMovieDetails(
               }
             });
 
-
             //compose a partial movice object
             var movie = {
               movieID,
               title,
-                ///convert iso_639_1 code into full form language description
+              ///convert iso_639_1 code into full form language description
               language: ISOLanguages.find(
                 _language =>
-                  _language.iso6391 == movieResults.spoken_languages[0].iso_639_1
+                  _language.iso6391 ==
+                  movieResults.spoken_languages[0].iso_639_1
               ).name,
               synopsis,
               rating,
               trailer: "",
-              rating : 5,
-              duration : 210,
               poster: posterURL,
               genres: genresArray,
               cast: castArray,
@@ -206,30 +207,16 @@ function getMovieDetails(
   });
 }
 
-//Construct movie poster URL
-function getMoviePosterURL(_posterFile, _width) {
-  if (!_width) throw Error(`Poster width must be specified : ${_width}`);
-  if (!_posterFile)
-    throw Error(`Poster file name must be specified : ${_posterFile}`);
-
-  let posterURL = `https://image.tmdb.org/t/p/w[IMAGE_WIDTH]/[IMAGE_FILE_NAME]`;
-  return posterURL
-    .split("[IMAGE_WIDTH]")
-    .join(_width)
-    .split("[IMAGE_FILE_NAME]")
-    .join(_posterFile);
-}
-
-//Retieve moive detals with helper functions
+//Coordinator function to retrieve movie details using @getMovieID and @getMovieDetails
 function retrieveMovie({
-  apiKey = movieAPIKey,
+  apiKey,
   movieName,
   properties = ["videos", "images", "credits"]
 }) {
   return new Promise((resolve, reject) => {
     getMovieID(apiKey, movieName)
       .then(movieid => {
-        getMovieDetails(movieAPIKey, movieid, properties)
+        getMovieDetails(apiKey, movieid, properties)
           .then(movie => {
             resolve(movie); // resolve promise with all movie details
           })
@@ -240,23 +227,33 @@ function retrieveMovie({
           }); //getMovieDetails().catch()
       })
       .catch(err => {
-        reject(`Error: Unable to retrieve Movie ID  for movie ${movieName}`);
+        reject(
+          `Error: Unable to retrieve Movie ID  for movie ${movieName}` +
+            err.message
+        );
       }); //getMovieID().catch()
   }); //return new Promise()
 }
 
 export { retrieveMovie };
 
-//TEST MODULE
-//let testMovies = ["Kadaikutty Singam", "chekka chivantha vaanam", "venom", "minnale", "titanic", "Kaakha Kaakha", "cinderella"];
-// ["videos", "images", "credits"]
-// let testMovies = ["Kadaikutty Singam"]
+// //TEST MODULE
+// let testMovies = [
+//   "Kadaikutty Singam",
+//   "chekka chivantha vaanam",
+//   "venom",
+//   "minnale",
+//   "titanic",
+//   "Kaakha Kaakha",
+//   "cinderella"
+// ];
+// //let testMovies = ["Kadaikutty Singam"]
 // testMovies.forEach(movieitem => {
-//   retrieveMovie( {movieName : movieitem}).then(
-//     movie => {
-//       // console.log(JSON.parse(JSON.stringify(movie, null, "")));
-//       console.log(JSON.stringify(movie, null, 2));
-//       //movie.json().then(jsonString => console.log(jsonString));
-//     }
-//   );
+//   retrieveMovie({
+//     apiKey: "5066229b476a9c157a74692454f7661e",
+//     movieName: movieitem,
+//     properties: ["videos", "images", "credits"]
+//   }).then(movie => {
+//     console.log(JSON.stringify(movie, null, 2));
+//   });
 // });
