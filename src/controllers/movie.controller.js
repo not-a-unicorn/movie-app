@@ -1,4 +1,5 @@
 import { isArray } from "util";
+import { cursorTo } from "readline";
 
 //import { Movie } from "./movie.model";
 var Movie = require("../models/movie.model");
@@ -8,8 +9,7 @@ var tmdb = require("../vendor/tmdb");
 
 //Returns all movies irrespective without session(show) info
 export async function getAllMovies(req, res) {
-  // .select("+updated"); to included an excluded field
-
+  console.log("in get All Movies");
   const _limit = Number(req.query.limit) || 10;
   const _skip = _limit * Number(req.query.skip) || 0;
 
@@ -64,19 +64,119 @@ export async function getMoviebyID(req, res, next) {
 // TODO: determine how to determine whats and active session
 //Returns all movies with only active sessions
 export async function getMoviesWithActiveSessions(req, res) {
-  const limit = Number(req.query.limit) || 100;
-  const skip = limit * Number(req.query.skip) || 0;
+  const {
+    limit = 100,
+    skip = 0,
+    states: cinemaStates = "",
+    languages: movieLanguages = ""
+  } = req.query;
+
+  console.log(`limit ${limit}`);
+  console.log(`skip  ${skip}`);
+  console.log(`states ${cinemaStates}`);
+  console.log(`langs ${movieLanguages}`);
 
   var movieSessions = [];
   try {
-    let movies = await Movie.find()
-      .limit(limit)
-      .skip(skip);
+    // let movies = await Movie.find({ language:  { $exists: true, $in: movieLanguages}})
+    let movies = await Movie.find({
+      language: { $in: movieLanguages.split(",") }
+    })
+      .limit(Number(limit))
+      .skip(skip * limit);
 
     for (const movie of movies) {
-      const sessions = await Session.find({ movie: movie._id }).populate(
+      let sessions = await Session.find({ movie: movie._id }).populate(
         "cinema"
       );
+
+      let filteredSessions = sessions.filter((session, sessionIndex) => {
+        //no need to filter if the client didnt pass state specifier
+        if (cinemaStates.trim().length === 0) return true;
+        return (
+          cinemaStates.split(",").filter((state, stateIndex) => {
+            const match =
+              session.cinema &&
+              session.cinema.state &&
+              state === session.cinema.state;
+            //const match=true;
+            console.log(`match ${match}`);
+            return match;
+          }).length > 0
+        );
+      });
+
+      //only add a movie + session combination if there is at least one active session available
+      if (filteredSessions.length >0) {
+        //construct movie and sessions into a single object
+        const movieSession = { ...movie._doc, sessions: filteredSessions };
+        console.log(filteredSessions);
+        movieSessions.push(movieSession);
+      }
+    }
+
+    handleResponse({
+      reponse: res,
+      status: "success",
+      message:
+        movieSessions.length > 0
+          ? "Successfully retrieved movies"
+          : "No movies available for the specified criteria",
+      content: movieSessions
+    });
+  } catch (error) {
+    console.log(`error in the catch  ${error} `);
+    handleResponse({
+      reponse: res,
+      status: "error",
+      message: error.message
+    });
+  }
+}
+
+// TODO: determine how to determine whats and active session
+// ? implement filter using querymen https://stackoverflow.com/questions/35542805/perform-a-mongoose-query-in-querystring
+//Returns all movies with only active sessions
+export async function getMoviesByQuery(req, res) {
+  console.log("in getMoviesWithActiveSessions");
+
+  // var query = req.querymen.query;
+  // var limit = req.querymen.cursor.limit;
+  // var skip = req.querymen.cursor.limit * req.querymen.cursor.skip;
+
+  const {
+    query,
+    cursor: { limit },
+    cursor: { skip },
+    sessionStart,
+    cinemaState
+  } = req.querymen;
+
+  // console.log(req.querymen);
+
+  var movieSessions = [];
+  try {
+    let movies = await Movie.find(query)
+      .limit(limit)
+      .skip(skip * limit);
+
+    for (const movie of movies) {
+      const sessions = await Session.find({
+        movie: movie._id
+      }).populate("cinema");
+
+      console.log(sessions);
+      //filter only the sessions based on client request
+      let _filteredSessionTimes = sessions[0].sessionDateTime.filter(_times => {
+        return _times > sessionStart.sessionDateTime;
+      });
+      console.log(sessionStart);
+      console.log("-------------");
+      console.log(sessions);
+      console.log("------------------");
+      console.log(_filteredSessionTimes);
+      const cinemas = await Cinema.find(cinemaState);
+      console.log(`cinemas ${cinemas}`);
       // TODO : do this "document join" in mongodbitself to reduce IO + Network
       //construct movie and sessions into a single obect
       const movieSession = { ...movie._doc, sessions };

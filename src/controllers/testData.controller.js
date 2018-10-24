@@ -24,9 +24,9 @@ export async function isDevEnvironment(req, res, next) {
 
 export async function deleteTestData(req, res) {
   try {
-    await Movie.remove();
-    await Session.remove();
-    await Cinema.remove();
+    await Movie.deleteMany();
+    await Session.deleteMany();
+    await Cinema.deleteMany();
     handleResponse({
       reponse: res,
       status: "success",
@@ -48,9 +48,9 @@ export async function createTestData(req, res) {
   try {
     //Delete old test data to avoid conflicts
 
-    await Movie.remove();
-    await Session.remove();
-    await Cinema.remove();
+    await Movie.deleteMany();
+    await Session.deleteMany();
+    await Cinema.deleteMany();
 
     //Load new test data
     var sampleDataDir = path.join(__dirname, "./../data/");
