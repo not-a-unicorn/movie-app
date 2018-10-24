@@ -71,11 +71,6 @@ export async function getMoviesWithActiveSessions(req, res) {
     languages: movieLanguages = ""
   } = req.query;
 
-  console.log(`limit ${limit}`);
-  console.log(`skip  ${skip}`);
-  console.log(`states ${cinemaStates}`);
-  console.log(`langs ${movieLanguages}`);
-
   var movieSessions = [];
   try {
     // let movies = await Movie.find({ language:  { $exists: true, $in: movieLanguages}})
@@ -95,22 +90,16 @@ export async function getMoviesWithActiveSessions(req, res) {
         if (cinemaStates.trim().length === 0) return true;
         return (
           cinemaStates.split(",").filter((state, stateIndex) => {
-            const match =
-              session.cinema &&
-              session.cinema.state &&
-              state === session.cinema.state;
-            //const match=true;
-            console.log(`match ${match}`);
+            const match = state === session.cinema.state;
             return match;
           }).length > 0
         );
       });
 
       //only add a movie + session combination if there is at least one active session available
-      if (filteredSessions.length >0) {
+      if (filteredSessions.length > 0) {
         //construct movie and sessions into a single object
         const movieSession = { ...movie._doc, sessions: filteredSessions };
-        console.log(filteredSessions);
         movieSessions.push(movieSession);
       }
     }
