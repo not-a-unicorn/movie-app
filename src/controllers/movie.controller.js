@@ -81,9 +81,9 @@ export async function getMoviesWithActiveSessions(req, res) {
   try {
     // let movies = await Movie.find({ language:  { $exists: true, $in: movieLanguages}})
     let movies = await Movie.find({
-      language: { $in: movieLanguages.split(",").trim() } // TODO: bug fix - mispelt languages exlcudes even the valid languages
+      language: { $in: movieLanguages.trim().split(",") } // TODO: bug fix - mispelt languages exlcudes even the valid languages
     })
-      .sort(-created) //! NEW sort
+      .sort({ created: "desc" }) //! NEW sort
       .limit(Number(limit))
       .skip(skip * limit);
 
@@ -101,8 +101,8 @@ export async function getMoviesWithActiveSessions(req, res) {
         //compare @session.cinema.state against every cinemaStates array item
         return (
           cinemaStates
-            .split(",")
             .trim()
+            .split(",")
             .filter(state => {
               const match = state === session.cinema.state;
               return match;
@@ -252,6 +252,7 @@ function handleResponse({ reponse, status, message = "", content = [] }) {
   let httpStatus = status == "success" ? 200 : 500;
 
   const _status = { status, message };
-  const obj = JSON.stringify({ status: _status, content }, "\t"); //prettify json
+  //const obj = JSON.stringify({ status: _status, content }, null,2); //prettify json
+  const obj = { status: _status, content };
   reponse.status(httpStatus).json(obj);
 }
