@@ -1,52 +1,65 @@
-// @gokuvinoth
-// 03/Oct/2018 Initial Draft
-// 07/Oct/2018 modified as per the comments to simply code
-// to retrive the movie list from api and display in the app.html
-//------ improments required to reuse functions in creating elements
+const express = require("express");
+const app = express();
+const morgan = require("morgan");
+const bodyParser = require("body-parser");
+const helper = require("./helpers/helpers");
+require("dotenv").config();
 
-// Calling the movie result api
-//include("xmlhttprequest").XMLHttpRequest;
+//import appwide routes
+import appRoutes from "./routes/app.routes";
+import testRoutes from "/routes/testData.routes";
 
-const xhr = new XMLHttpRequest();
-xhr.responseType = "json";
-xhr.onreadystatechange = () => {
-  if (xhr.readyState === XMLHttpRequest.DONE) {
-    console.log(xhr.response);
-    // function call to process api result
-    displayResult(xhr.response);
+//Web Server
+app.use(morgan("dev")); //HTTP request logger
+
+//Easy reading of request info
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+//Set headers
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    return res.status(200).json({});
   }
-};
-// url to call api
-xhr.open("GET", "https://salty-sea-40504.herokuapp.com/movies");
-xhr.send();
+  next();
+});
 
-let displayResult = response => {
-  let responseDataArry = response;
-  console.log(responseDataArry[0]);
+// http://www.tutorialsteacher.com/nodejs/serving-static-files-in-nodejs   ?
+//Static files
+//app.use("/assets", express.static("public"));
 
-  let movieElement = "";
-  //   looping to create elements for number of items returned
-  responseDataArry.forEach(function(responseData) {
-    movieElement =
-      movieElement +
-      `<div class="movie">
-    <h2 class="movie-title" id="movietitle">${responseData.title}</h2>
-    <img class="movie-poster" id="movieposter" src="${
-      responseData.poster
-    }" alt="hero and heroine">
-    <ul class="movie-info" id="movieinfo">
-        <li class="movie-show-time" id=movieshowtime><a class="movie-more-info" id="moviemoreinfo" href="#">${
-          responseData.sessions[0].sessionDateTime[0]
-        }</a></li>
-        <li class="movie-language" id="movielanguage">${
-          responseData.language
-        }</li>
-    </ul>
-</div>`;
+//Assign Route definitions to the request
+app.use("/api", appRoutes);
 
-    console.log(movieElement);
+if (helper.isDevelopmentMode()) {
+  app.use("/test", testRoutes); //enable facility load test data if the NODE_ENV is development
+  require("dotenv").config(); //  load environmental configs if the NODE_ENV is development
+}
+
+//Error handling
+//404 - Not found
+app.use((req, res, next) => {
+  const err = Error("Not found");
+  err.status = 404;
+  next(err);
+});
+
+//Global error handling
+app.use((err, req, res, next) => {
+  res.status = err.status || 500;
+  res.json({
+    error: {
+      message: err.message
+    }
   });
-  //   create final element and append to display the full content in HTML
-  let resultElement = document.querySelector("#movies");
-  resultElement.innerHTML = movieElement;
-};
+});
+
+
+
+module.exports = app;
