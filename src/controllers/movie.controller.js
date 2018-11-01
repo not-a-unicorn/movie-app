@@ -79,13 +79,23 @@ export async function getMoviesWithActiveSessions(req, res) {
 
   const movieSessions = [];
   try {
-    // let movies = await Movie.find({ language:  { $exists: true, $in: movieLanguages}})
-    let movies = await Movie.find({
-      language: { $in: movieLanguages.trim().split(",") } // TODO: bug fix - mispelt languages exlcudes even the valid languages
-    })
-      .sort({ created: "desc" }) //! NEW sort
-      .limit(Number(limit))
-      .skip(skip * limit);
+    let movies = [];
+
+    //TODO : refactor the block to better handle client not specifying the languages
+    if (movieLanguages) {
+      //let movies = await Movie.find({ language:  { $exists: true, $in: movieLanguages}})
+      movies = await Movie.find({
+        language: { $in: movieLanguages.trim().split(",") } // TODO: bug fix - mispelt languages exlcudes even the valid languages
+      })
+        .sort({ created: "desc" }) //! NEW sort
+        .limit(Number(limit))
+        .skip(skip * limit);
+    } else {
+      movies = await Movie.find()
+        .sort({ created: "desc" }) //! NEW sort
+        .limit(Number(limit))
+        .skip(skip * limit);
+    }
 
     //retrieve sessions associated with @movies
     for (const movie of movies) {

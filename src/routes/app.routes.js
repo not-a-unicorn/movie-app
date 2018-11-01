@@ -30,7 +30,7 @@ router.post("/v1/movies/create", movieController.createMovieByName);
 router.get(
   ["/v1/movies/getSessions/"],
   catchErrors(movieController.getMoviesWithActiveSessions)
-); //deprecate root level API serves
+); 
 
 
 // get all movies with active show sessions by custom querying
