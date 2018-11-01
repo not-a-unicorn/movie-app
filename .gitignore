@@ -30,14 +30,9 @@ bower_components
 .lock-wscript
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
-<<<<<<< HEAD
 build/
 dist/
 .cache/
-=======
-build/Release
-app/
->>>>>>> origin/serverside
 
 # Dependency directories
 node_modules/
